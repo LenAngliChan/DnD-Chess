@@ -84,7 +84,7 @@ class BasicUnit(ABC):
         self.ability = ability
         self.perks = perks
         self.level = level
-        self.current_hp = self.hit_points
+        self.current_hp = 0 + self.hit_points
         self.armor = 0
 
     @property

@@ -28,7 +28,7 @@ class Barbarian(Figure):
         index: tuple[int, int],
     ):
         unit = UnitBarbarian()
-        textures = 'src/sprites/Barbarian.png'
+        textures = 'src/sprites/units/Barbarian.png'
         super().__init__(
             domain=domain,
             index=index,
@@ -45,7 +45,7 @@ class Bard(Figure):
         index: tuple[int, int],
     ):
         unit = UnitBard()
-        textures = 'src/sprites/Bard.png'
+        textures = 'src/sprites/units/Bard.png'
         super().__init__(
             domain=domain,
             textures=textures,
@@ -62,7 +62,7 @@ class Cleric(Figure):
         index: tuple[int, int],
     ):
         unit = UnitCleric()
-        textures = 'src/sprites/Cleric.png'
+        textures = 'src/sprites/units/Cleric.png'
         super().__init__(
             domain=domain,
             textures=textures,
@@ -79,7 +79,7 @@ class Druid(Figure):
         index: tuple[int, int],
     ):
         unit = UnitDruid()
-        textures = 'src/sprites/Druid.png'
+        textures = 'src/sprites/units/Druid.png'
         super().__init__(
             domain=domain,
             textures=textures,
@@ -96,7 +96,7 @@ class Fighter(Figure):
         index: tuple[int, int],
     ):
         unit = UnitFighter()
-        textures = 'src/sprites/Fighter.png'
+        textures = 'src/sprites/units/Fighter.png'
         super().__init__(
             domain=domain,
             textures=textures,
@@ -113,7 +113,7 @@ class Monk(Figure):
         index: tuple[int, int],
     ):
         unit = UnitMonk()
-        textures = 'src/sprites/Monk.png'
+        textures = 'src/sprites/units/Monk.png'
         super().__init__(
             domain=domain,
             textures=textures,
@@ -130,7 +130,7 @@ class Paladin(Figure):
         index: tuple[int, int],
     ):
         unit = UnitPaladin()
-        textures = 'src/sprites/Paladin.png'
+        textures = 'src/sprites/units/Paladin.png'
         super().__init__(
             domain=domain,
             textures=textures,
@@ -147,7 +147,7 @@ class Ranger(Figure):
         index: tuple[int, int],
     ):
         unit = UnitRanger()
-        textures = 'src/sprites/Ranger.png'
+        textures = 'src/sprites/units/Ranger.png'
         super().__init__(
             domain=domain,
             textures=textures,
@@ -164,7 +164,7 @@ class Rogue(Figure):
         index: tuple[int, int],
     ):
         unit = UnitRogue()
-        textures = 'src/sprites/Rogue.png'
+        textures = 'src/sprites/units/Rogue.png'
         super().__init__(
             domain=domain,
             textures=textures,
@@ -181,7 +181,7 @@ class Sorcerer(Figure):
         index: tuple[int, int],
     ):
         unit = UnitSorcerer()
-        textures = 'src/sprites/Sorcerer.png'
+        textures = 'src/sprites/units/Sorcerer.png'
         super().__init__(
             domain=domain,
             textures=textures,
@@ -198,7 +198,7 @@ class Warlock(Figure):
         index: tuple[int, int],
     ):
         unit = UnitWarlock()
-        textures = 'src/sprites/Warlock.png'
+        textures = 'src/sprites/units/Warlock.png'
         super().__init__(
             domain=domain,
             textures=textures,
@@ -215,7 +215,7 @@ class Wizard(Figure):
         index: tuple[int, int],
     ):
         unit = UnitWizard()
-        textures = 'src/sprites/Wizard.png'
+        textures = 'src/sprites/units/Wizard.png'
         super().__init__(
             domain=domain,
             textures=textures,

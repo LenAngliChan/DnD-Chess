@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Iterable
+from typing import TYPE_CHECKING, Iterable, Optional
 
 if TYPE_CHECKING:
     from src.abstractions.domain import BasicDomain
     from src.abstractions.sprite import BasicSprite
+    from src.abstractions.figure import BasicFigure
     from src.abstractions.tools import BasicAttribute
     from src.abstractions.action import BasicAction
     from collections import UserDict
@@ -19,7 +20,7 @@ class BasicBoard(ABC):
         grey_domain: "BasicDomain",
         time: "BasicAttribute",
         cells: "UserDict[tuple[int, int], BasicSprite]" = None,
-        figures: "UserDict[str, BasicSprite]" = None,
+        figures: "UserDict[str, BasicFigure]" = None,
         buildings: "UserDict[tuple[int, int], BasicSprite]" = None,
     ):
         """Инициализация доски
@@ -100,11 +101,11 @@ class BasicBoard(ABC):
         pass
 
     @abstractmethod
-    def get_figure_action_list(self) -> Iterable["BasicAction"] | None:
+    def get_figure_action_list(self) -> Optional["UserDict[str, BasicAction]"]:
         """Получить список действий фигуры
 
         Returns:
-            iterable: список действий
+            dict: список действий
         """
         pass
 

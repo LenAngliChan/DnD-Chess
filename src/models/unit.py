@@ -155,7 +155,6 @@ class Unit(BasicUnit):
             perks=perks,
             level=level,
         )
-        self.current_hp = self.hit_points
 
     @property
     def hit_chance(self) -> int:
@@ -235,7 +234,7 @@ class Unit(BasicUnit):
     def level_up(self) -> None:
         """Повысить уровень персонажа (на 1 пункт)"""
         self.level += 1
-        self.current_hp = self.hit_points
+        self.current_hp = 0 + self.hit_points
 
     def defend(self, damage: int = 0) -> None:
         """Действие - защищаться (получить урон от другого персонажа)

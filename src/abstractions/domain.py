@@ -5,7 +5,7 @@ from arcade import color
 from arcade.texture import default_texture_cache
 
 if TYPE_CHECKING:
-    from src.abstractions.sprite import BasicSprite
+    from src.abstractions.figure import BasicFigure
 
 
 class BasicDomain(ABC):
@@ -30,11 +30,11 @@ class BasicDomain(ABC):
         self.texture = default_texture_cache.load_or_get_texture(file_path=textures)
         self.color = domain_color
         self.power = power
-        self.figures: UserDict[tuple[int, int], "BasicSprite"] = UserDict()
-        self.prisoners: UserDict[tuple[int, int], "BasicSprite"] = UserDict()
+        self.figures: UserDict[tuple[int, int], "BasicFigure"] = UserDict()
+        self.prisoners: UserDict[tuple[int, int], "BasicFigure"] = UserDict()
 
     @abstractmethod
-    def set_figures(self, figures: Iterable["BasicSprite"]) -> None:
+    def set_figures(self, figures: Iterable["BasicFigure"]) -> None:
         """Установить фигуры домена
 
         Args:
@@ -43,7 +43,7 @@ class BasicDomain(ABC):
         pass
 
     @abstractmethod
-    def kill_figure(self, figure: "BasicSprite") -> None:
+    def kill_figure(self, figure: "BasicFigure") -> None:
         """Убить фигуру домена
 
         Args:
@@ -52,7 +52,7 @@ class BasicDomain(ABC):
         pass
 
     @abstractmethod
-    def get_prisoner(self, figure: "BasicSprite") -> None:
+    def get_prisoner(self, figure: "BasicFigure") -> None:
         """Установить фигуру-пленника домена
 
         Args:

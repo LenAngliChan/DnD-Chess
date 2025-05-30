@@ -1,10 +1,11 @@
-from typing import TYPE_CHECKING, Iterable
+from typing import TYPE_CHECKING, Iterable, Optional
 from arcade import color
 
 from src.abstractions.board import BasicBoard
 from src.models.collection import FigureCollection, CellCollection, BuildingCollection
 from src.models.domain import Domain
 from src.models.cell import Cell
+from src.models.text import GameText
 from src.board.figures import get_figures_position
 from src.board.buildings import get_buildings_position
 from src.utils.enums import Time
@@ -12,6 +13,7 @@ from src.utils.enums import Time
 if TYPE_CHECKING:
     from src.abstractions.action import BasicAction
     from src.abstractions.sprite import BasicSprite
+    from collections import UserDict
 
 
 class Board(BasicBoard):
@@ -47,6 +49,13 @@ class Board(BasicBoard):
             cells=cells,
             figures=figures,
             buildings=buildings,
+        )
+
+        # информационное табло
+        self.info_text = GameText(
+            title="Game_Info",
+            index=(4, 7),
+            text="Информация Информация Информация Информация Информация Информация",
         )
 
     def initialize_cells(self):
@@ -120,6 +129,12 @@ class Board(BasicBoard):
             cell: клетка
         """
         self.current_cell = cell
+        try:
+            actions = self.get_figure_action_list()
+            if actions:
+                self.current_action = actions["Move_Action"]
+        finally:
+            pass
 
     def select_action(
         self,
@@ -143,11 +158,11 @@ class Board(BasicBoard):
         """
         self._start_action(target=target)
 
-    def get_figure_action_list(self) -> Iterable["BasicAction"] | None:
+    def get_figure_action_list(self) -> Optional["UserDict[str, BasicAction]"]:
         """Получить список действий фигуры
 
         Returns:
-            iterable: список действий
+            dict: список действий
         """
         if self.current_cell.figure:
             return self.current_cell.figure.get_action_list()

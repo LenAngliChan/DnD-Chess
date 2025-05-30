@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Iterable
+from typing import TYPE_CHECKING
 
 from src.abstractions.sprite import BasicSprite
 from src.utils.constants import CELL_SIZE
@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from src.abstractions.item import BasicAttribute
     from src.abstractions.unit import BasicUnit
     from src.abstractions.action import BasicAction
+    from src.abstractions.indicator import BasicIndicatorBar
     from collections import UserDict
 
 
@@ -24,6 +25,7 @@ class BasicFigure(BasicSprite):
         unit: "BasicUnit",
         status: "BasicAttribute",
         actions: "UserDict[str, BasicAction]",
+        health_bar: "BasicIndicatorBar",
     ):
         """Инициализация фигуры
 
@@ -50,6 +52,7 @@ class BasicFigure(BasicSprite):
         self.unit = unit
         self.actions = actions
         self.can_move = True
+        self.health_bar = health_bar
 
     @abstractmethod
     def set_position(
@@ -66,7 +69,7 @@ class BasicFigure(BasicSprite):
         pass
 
     @abstractmethod
-    def get_action_list(self) -> Iterable["BasicAction"]:
+    def get_action_list(self) -> "UserDict[str, BasicAction]":
         """Получить список действий фигуры
 
         Returns:
@@ -86,4 +89,9 @@ class BasicFigure(BasicSprite):
     @abstractmethod
     def end_circle(self) -> None:
         """Завершить ход"""
+        pass
+
+    @abstractmethod
+    def kill_self(self) -> None:
+        """Уничтожить себя"""
         pass

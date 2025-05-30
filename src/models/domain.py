@@ -6,7 +6,7 @@ from src.models.collection import FigureCollection
 from src.utils.constants import BASE_DOMAIN_POWER
 
 if TYPE_CHECKING:
-    from src.abstractions.sprite import BasicSprite
+    from src.abstractions.figure import BasicFigure
 
 
 class Domain(BasicDomain):
@@ -34,7 +34,7 @@ class Domain(BasicDomain):
             power=power,
         )
 
-    def set_figures(self, figures: Iterable["BasicSprite"]) -> None:
+    def set_figures(self, figures: Iterable["BasicFigure"]) -> None:
         """Установить фигуры домена
 
         Args:
@@ -43,17 +43,17 @@ class Domain(BasicDomain):
         self.figures = FigureCollection(figures=figures)
         self.prisoners = FigureCollection()
 
-    def kill_figure(self, figure: "BasicSprite") -> None:
+    def kill_figure(self, figure: "BasicFigure") -> None:
         """Убить фигуру домена
 
         Args:
             figure: фигура
         """
         figure = self.figures.pop(figure.name)
-        figure.kill()
+        figure.kill_self()
         return figure
 
-    def get_prisoner(self, figure: "BasicSprite") -> None:
+    def get_prisoner(self, figure: "BasicFigure") -> None:
         """Установить фигуру-пленника домена
 
         Args:

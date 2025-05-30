@@ -14,7 +14,7 @@ class Castle(Building):
         domain: "Domain",
     ):
         name = "Castle"
-        textures = 'src/sprites/Castle.png'
+        textures = 'src/sprites/buildings/Castle.png'
         super().__init__(
             index=index,
             name=name,
@@ -33,7 +33,7 @@ class Crypt(Building):
         domain: "Domain",
     ):
         name = "Crypt"
-        textures = 'src/sprites/Crypt.png'
+        textures = 'src/sprites/buildings/Crypt.png'
         super().__init__(
             index=index,
             name=name,
@@ -51,7 +51,7 @@ class Altar(Building):
         domain: "Domain",
     ):
         name = "Altar"
-        textures = 'src/sprites/Altar.png'
+        textures = 'src/sprites/buildings/Altar.png'
         super().__init__(
             index=index,
             name=name,
