@@ -1,23 +1,26 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
+from arcade import load_texture, Texture
 
 if TYPE_CHECKING:
-    from src.abstractions.item import BasicItem
-    from src.abstractions.tools import BasicAttribute
-    from src.abstractions.unit import BasicUnit
+    from arcade.types import PathOrTexture
+    from src.abstractions.item import BaseItem
+    from src.abstractions.tools import BaseAttribute
+    from src.abstractions.unit import BaseUnit
     from src.abstractions.tools import F_spec
 
 
-class BasicPerk(ABC):
+class BasePerk(ABC):
     """Абстрактная модель способности"""
 
     def __init__(
         self,
         name: str,
-        item: "BasicItem",
-        attribute: "BasicAttribute",
-        status: "BasicAttribute",
-        modifier: "BasicAttribute",
+        item: "BaseItem",
+        attribute: "BaseAttribute",
+        status: "BaseAttribute",
+        modifier: "BaseAttribute",
+        texture_path: "PathOrTexture" = None,
     ):
         """Инициализация способности
 
@@ -33,9 +36,18 @@ class BasicPerk(ABC):
         self.attribute = attribute
         self.status = status
         self.modifier = modifier
+        if texture_path:
+            if isinstance(texture_path, Texture):
+                self._texture = texture_path
+            else:
+                self._texture = load_texture(file_path=texture_path)
+
+    @property
+    def texture(self) -> Optional["Texture"]:
+        return self._texture
 
     @abstractmethod
-    def activate(self, target: "BasicUnit", **kwargs: "F_spec.kwargs") -> None:
+    def activate(self, target: "BaseUnit", **kwargs: "F_spec.kwargs") -> None:
         """Активировать способность
 
         Args:
@@ -45,7 +57,7 @@ class BasicPerk(ABC):
         pass
 
     @abstractmethod
-    def change_attribute(self, value: "BasicAttribute") -> None:
+    def change_attribute(self, value: "BaseAttribute") -> None:
         """Изменить тип способности
 
         Args:
@@ -54,7 +66,7 @@ class BasicPerk(ABC):
         pass
 
     @abstractmethod
-    def change_status(self, value: "BasicAttribute") -> None:
+    def change_status(self, value: "BaseAttribute") -> None:
         """Изменить статус способности
 
         Args:
@@ -63,7 +75,7 @@ class BasicPerk(ABC):
         pass
 
     @abstractmethod
-    def change_modifier(self, value: "BasicAttribute") -> None:
+    def change_modifier(self, value: "BaseAttribute") -> None:
         """Изменить модификатор способности
 
         Args:

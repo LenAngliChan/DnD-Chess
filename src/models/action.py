@@ -1,23 +1,24 @@
 from typing import TYPE_CHECKING
 
-from src.abstractions.action import BasicAction
+from src.abstractions.action import BaseAction
 from src.utils.enums import ActionType, PerkType, FigureStatus, ActionKWArgs
 
 if TYPE_CHECKING:
-    from src.abstractions.perk import BasicPerk
-    from src.abstractions.tools import BasicAttribute
-    from src.abstractions.figure import BasicFigure
-    from src.abstractions.cell import BasicCell
+    from src.abstractions.perk import BasePerk
+    from src.abstractions.tools import BaseAttribute
+    from src.abstractions.figure import BaseFigure
+    from src.abstractions.cell import BaseCell
 
 
-class Action(BasicAction):
+class Action(BaseAction):
 
     def __init__(
         self,
         name: str,
-        figure: "BasicFigure",
-        attribute: "BasicAttribute" = ActionType.move.value,
-        perk: "BasicPerk" = None,
+        figure: "BaseFigure",
+        attribute: "BaseAttribute" = ActionType.move.value,
+        perk: "BasePerk" = None,
+        texture_path: str = None,
     ):
         """Инициализация действия
 
@@ -31,12 +32,13 @@ class Action(BasicAction):
             attribute=attribute,
             figure=figure,
             perk=perk,
+            texture_path=texture_path,
         )
 
     def realise(
         self,
-        current_cell: "BasicCell",
-        target: "BasicCell" = None
+        current_cell: "BaseCell",
+        target: "BaseCell" = None
     ) -> None:
         """Совершить действие
 
@@ -79,8 +81,8 @@ class Action(BasicAction):
 
     def _create_action(
         self,
-        current_cell: "BasicCell",
-        target: "BasicCell",
+        current_cell: "BaseCell",
+        target: "BaseCell",
     ) -> None:
         """Процесс совершения действия
 
@@ -104,8 +106,8 @@ class Action(BasicAction):
 
     def __use_perk(
         self,
-        current_cell: "BasicCell",
-        target: "BasicCell",
+        current_cell: "BaseCell",
+        target: "BaseCell",
     ) -> None:
         """Использование способности
 
@@ -116,7 +118,7 @@ class Action(BasicAction):
 
         # Расчет бонусов от домена и здания
         domain_bonus = self.figure.domain.power - target.figure.domain.power
-        building_bonus = target.building.defence_bonus if target.building else 0
+        building_bonus = target.building.defence if target.building else 0
         action_kwargs = {
             ActionKWArgs.domain_bonus.value: domain_bonus,
             ActionKWArgs.building_bonus.value: building_bonus,
@@ -137,7 +139,7 @@ class Action(BasicAction):
         # если фигура мертва
         if target.figure.status == FigureStatus.captive.value:
             figure = target.figure
-            target.figure = None
+            target.remove_figure()
             target.domain.kill_figure(figure=figure)
             self.figure.domain.get_prisoner(figure=figure)
             # если атака ближнего боя - перемещаемся на клетку
@@ -149,8 +151,8 @@ class Action(BasicAction):
 
     def __create_move(
         self,
-        current_cell: "BasicCell",
-        target: "BasicCell",
+        current_cell: "BaseCell",
+        target: "BaseCell",
     ) -> None:
         """Перемещение фигуры
 
@@ -158,16 +160,12 @@ class Action(BasicAction):
             current_cell: исходная клетка
             target: цель действия (клетка)
         """
-        self.figure.set_position(
-            coord_x=target.center_x,
-            coord_y=target.center_y,
-        )
+        current_cell.remove_figure()
         target.capture(figure=self.figure)
-        current_cell.figure = None
 
     def __create_convergence(
         self,
-        target: "BasicCell",
+        target: "BaseCell",
     ) -> None:
         """Сближение фигуры для ближнего боя
 
@@ -194,8 +192,3 @@ class Action(BasicAction):
         # если цель на той же оси Y
         else:
             new_coord_y = self.figure.center_y
-
-        self.figure.set_position(
-            coord_x=new_coord_x,
-            coord_y=new_coord_y,
-        )

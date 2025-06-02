@@ -2,16 +2,18 @@ from collections import UserDict
 from typing import TYPE_CHECKING, Iterable
 
 if TYPE_CHECKING:
-    from src.abstractions.perk import BasicPerk
-    from src.abstractions.sprite import BasicSprite
-    from src.abstractions.action import BasicAction
+    from src.abstractions.cell import BaseCell
+    from src.abstractions.building import BaseBuilding
+    from src.abstractions.figure import BaseFigure
+    from src.abstractions.perk import BasePerk
+    from src.abstractions.action import BaseAction
 
 
 class PerkCollection(UserDict):
 
     def __init__(
         self,
-        perks: Iterable["BasicPerk"] = None,
+        perks: Iterable["BasePerk"] = None,
     ):
         if perks:
             collection = {
@@ -27,7 +29,7 @@ class FigureCollection(UserDict):
 
     def __init__(
         self,
-        figures: Iterable["BasicSprite"] = None,
+        figures: Iterable["BaseFigure"] = None,
     ):
         if figures:
             collection = {
@@ -43,7 +45,7 @@ class CellCollection(UserDict):
 
     def __init__(
         self,
-        cells: Iterable["BasicSprite"] = None,
+        cells: Iterable["BaseCell"] = None,
     ):
         if cells:
             collection = {
@@ -59,7 +61,7 @@ class BuildingCollection(UserDict):
 
     def __init__(
         self,
-        buildings: Iterable["BasicSprite"] = None,
+        buildings: Iterable["BaseBuilding"] = None,
     ):
         if buildings:
             collection = {
@@ -75,7 +77,7 @@ class ActionCollection(UserDict):
 
     def __init__(
         self,
-        actions: Iterable["BasicAction"] = None,
+        actions: Iterable["BaseAction"] = None,
     ):
         if actions:
             collection = {

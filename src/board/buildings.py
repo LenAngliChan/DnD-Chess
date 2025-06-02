@@ -13,13 +13,11 @@ class Castle(Building):
         index: tuple[int, int],
         domain: "Domain",
     ):
-        name = "Castle"
-        textures = 'src/sprites/buildings/Castle.png'
         super().__init__(
             index=index,
-            name=name,
+            name="Castle",
             domain=domain,
-            textures=textures,
+            texture_path='src/sprites/buildings/Castle.png',
             defence_bonus=6,
             can_change_domain=False,
         )
@@ -32,13 +30,11 @@ class Crypt(Building):
         index: tuple[int, int],
         domain: "Domain",
     ):
-        name = "Crypt"
-        textures = 'src/sprites/buildings/Crypt.png'
         super().__init__(
             index=index,
-            name=name,
+            name="Crypt",
             domain=domain,
-            textures=textures,
+            texture_path='src/sprites/buildings/Crypt.png',
             defence_bonus=2,
         )
 
@@ -50,13 +46,11 @@ class Altar(Building):
         index: tuple[int, int],
         domain: "Domain",
     ):
-        name = "Altar"
-        textures = 'src/sprites/buildings/Altar.png'
         super().__init__(
             index=index,
-            name=name,
+            name="Altar",
             domain=domain,
-            textures=textures,
+            texture_path='src/sprites/buildings/Altar.png',
             defence_bonus=4,
         )
 
@@ -64,14 +58,14 @@ class Altar(Building):
 def get_buildings_position() -> dict[tuple[int, int], Type[Building]]:
 
     buildings_position = {
-        (1, 3): Castle,
-        (7, 4): Castle,
-        (3, 1): Altar,
-        (5, 6): Altar,
-        (4, 1): Crypt,
-        (4, 3): Crypt,
+        (3, 1): Castle,
+        (4, 7): Castle,
+        (1, 3): Altar,
+        (6, 5): Altar,
+        (1, 4): Crypt,
+        (3, 4): Crypt,
         (4, 4): Crypt,
-        (4, 6): Crypt
+        (6, 4): Crypt
     }
 
     return buildings_position

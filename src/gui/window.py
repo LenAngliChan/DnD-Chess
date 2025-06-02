@@ -16,8 +16,8 @@ class ChessWindow(arcade.Window):
             height=WINDOW_HEIGHT,
             title=WINDOW_TITLE,
             resizable=True,
-            update_rate=1,
-            draw_rate=1,
+            # update_rate=1,
+            # draw_rate=1,
         )
         self.game = Chess()
 

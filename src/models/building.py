@@ -1,39 +1,44 @@
 from typing import TYPE_CHECKING
 
-from src.abstractions.building import BasicBuilding
+from src.abstractions.building import BaseBuilding
+from src.abstractions.tools import SpriteCore
+from src.utils.constants import CELL_SIZE
 
 if TYPE_CHECKING:
-    from src.abstractions.board import BasicDomain
-    from src.abstractions.sprite import BasicSprite
+    from src.abstractions.figure import BaseFigure
+    from src.abstractions.domain import BaseDomain
 
 
-class Building(BasicBuilding):
+class Building(BaseBuilding):
 
     def __init__(
         self,
         index: tuple[int, int],
-        domain: "BasicDomain",
+        domain: "BaseDomain",
         name: str = "",
-        textures: str = "",
+        texture_path: str = None,
         defence_bonus: int = 0,
-        figure: "BasicSprite" = None,
+        figure: "BaseFigure" = None,
         can_change_domain: bool = True,
     ):
         """Инициализация здания
 
         Args:
-            index: позиция на доске
-            name: имя
-            domain: домен
-            textures: текстура
+            index: свойства графического объекта
+            defence_bonus: бонус защиты
             figure: фигура
             can_change_domain: возможность сменить домен
         """
-        super().__init__(
+        core = SpriteCore(
+            name=name + str(index),
             index=index,
-            name=name,
+            texture_path=texture_path,
+            width=CELL_SIZE // 1.5,
+            height=CELL_SIZE // 1.5,
             domain=domain,
-            textures=textures,
+        )
+        super().__init__(
+            core=core,
             defence_bonus=defence_bonus,
             figure=figure,
             can_change_domain=can_change_domain,

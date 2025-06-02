@@ -1,31 +1,32 @@
 from typing import TYPE_CHECKING, Iterable
 
-from src.abstractions.perk import BasicPerk
+from src.abstractions.perk import BasePerk
 from src.utils.enums import PerkType, PerkStatus, PerkModifier, ActionKWArgs
 from models.dice import DiceRoll, StaticDice, CritRoll, DifficultyDice
 from src.utils.decorators import modify_perk_action
 from src.utils.constants import WEAPON_ROLL_DIFFICULTY, SPELL_ROLL_DIFFICULTY
 
 if TYPE_CHECKING:
-    from src.abstractions.item import BasicItem
-    from src.abstractions.unit import BasicUnit
-    from src.abstractions.dice import BasicDice
-    from src.abstractions.tools import BasicAttribute
+    from src.abstractions.item import BaseItem
+    from src.abstractions.unit import BaseUnit
+    from src.abstractions.dice import BaseDice
+    from src.abstractions.tools import BaseAttribute
     from src.abstractions.tools import F_spec
 
 
-class Perk(BasicPerk):
+class Perk(BasePerk):
     """Модель способности"""
 
     def __init__(
         self,
         name: str,
-        item: "BasicItem",
-        attribute: "BasicAttribute",
-        status: "BasicAttribute",
-        modifier: "BasicAttribute",
-        person: "BasicUnit",
-        difficulty_dice: "BasicDice",
+        item: "BaseItem",
+        attribute: "BaseAttribute",
+        status: "BaseAttribute",
+        modifier: "BaseAttribute",
+        person: "BaseUnit",
+        difficulty_dice: "BaseDice",
+        texture_path: str = None,
     ):
         """Инициализация способности
 
@@ -44,6 +45,7 @@ class Perk(BasicPerk):
             attribute=attribute,
             status=status,
             modifier=modifier,
+            texture_path=texture_path,
         )
         self.person = person
         self.difficulty = DiceRoll(dice=difficulty_dice)
@@ -79,7 +81,7 @@ class Perk(BasicPerk):
         """
         return self.crit_roll.action()
 
-    def activate(self, target: "BasicUnit", **kwargs: "F_spec.kwargs"):
+    def activate(self, target: "BaseUnit", **kwargs: "F_spec.kwargs"):
         """Активировать способность
 
          Args:
@@ -91,7 +93,7 @@ class Perk(BasicPerk):
         self.action(target=target, **kwargs)
         self.status = PerkStatus.done.value
 
-    def change_attribute(self, value: "BasicAttribute") -> None:
+    def change_attribute(self, value: "BaseAttribute") -> None:
         """Изменить тип способности
 
         Args:
@@ -99,7 +101,7 @@ class Perk(BasicPerk):
         """
         self.attribute = value
 
-    def change_status(self, value: "BasicAttribute") -> None:
+    def change_status(self, value: "BaseAttribute") -> None:
         """Изменить статус способности
 
         Args:
@@ -107,7 +109,7 @@ class Perk(BasicPerk):
         """
         self.status = value
 
-    def change_modifier(self, value: "BasicAttribute") -> None:
+    def change_modifier(self, value: "BaseAttribute") -> None:
         """Изменить модификатор способности
 
         Args:
@@ -115,7 +117,7 @@ class Perk(BasicPerk):
         """
         self.modifier = value
 
-    def base_hit_resistance(self, target: "BasicUnit") -> int:
+    def base_hit_resistance(self, target: "BaseUnit") -> int:
         """Сопротивляемость удару
         Рассчитывается как:
             спасбросок цели
@@ -128,7 +130,7 @@ class Perk(BasicPerk):
         """
         return target.ability.save_throw(attribute=self.item.attribute)
 
-    def base_crit_resistance(self, target: "BasicUnit") -> int:
+    def base_crit_resistance(self, target: "BaseUnit") -> int:
         """Сопротивляемость критическому удару
         Рассчитывается как:
             сопротивляемость цели критическому удару
@@ -142,7 +144,7 @@ class Perk(BasicPerk):
         """
         return target.crit_resistance + self.crit_roll.resistance
 
-    def hit(self, target: "BasicUnit") -> bool:
+    def hit(self, target: "BaseUnit") -> bool:
         """Попадание
         Рассчитывается как:
             Шанс попадания > Защита цели
@@ -155,7 +157,7 @@ class Perk(BasicPerk):
         """
         return self.hit_chance() > self.base_hit_resistance(target=target)
 
-    def crit(self, target: "BasicUnit") -> bool:
+    def crit(self, target: "BaseUnit") -> bool:
         """Критический удар
         Рассчитывается как:
             Шанс критического удара > Защита цели от критического удара
@@ -216,7 +218,7 @@ class Perk(BasicPerk):
         """
         return self.hit_value()
 
-    def action(self, target: "BasicUnit", **kwargs: "F_spec.kwargs") -> None:
+    def action(self, target: "BaseUnit", **kwargs: "F_spec.kwargs") -> None:
         """Воздействие на цель
 
         Args:
@@ -232,12 +234,13 @@ class Melee(Perk):
     def __init__(
         self,
         name: str,
-        weapon: "BasicItem",
-        person: "BasicUnit",
-        attribute: "BasicAttribute" = PerkType.melee.value,
-        status: "BasicAttribute" = PerkStatus.active.value,
-        modifier: "BasicAttribute" = PerkModifier.standard.value,
+        weapon: "BaseItem",
+        person: "BaseUnit",
+        attribute: "BaseAttribute" = PerkType.melee.value,
+        status: "BaseAttribute" = PerkStatus.active.value,
+        modifier: "BaseAttribute" = PerkModifier.standard.value,
         difficulty_value: int = WEAPON_ROLL_DIFFICULTY,
+        texture_path: str = None,
     ):
         """Инициализация способности
 
@@ -259,9 +262,10 @@ class Melee(Perk):
             modifier=modifier,
             person=person,
             difficulty_dice=difficulty_dice,
+            texture_path=texture_path,
         )
 
-    def hit(self, target: "BasicUnit") -> bool:
+    def hit(self, target: "BaseUnit") -> bool:
         """Попадание
         Рассчитывается как:
             Шанс попадания > Защита цели
@@ -280,7 +284,7 @@ class Melee(Perk):
         )
         return self.hit_chance() > target_defence
 
-    def action(self, target: "BasicUnit", **kwargs: "F_spec.kwargs") -> None:
+    def action(self, target: "BaseUnit", **kwargs: "F_spec.kwargs") -> None:
         """Воздействие на цель
         Оружие ближнего боя должно пройти проверку на попадание, чтобы нанести урон
         При критическом ударе кубик урона кидается дважды
@@ -333,12 +337,13 @@ class Armor(Perk):
     def __init__(
         self,
         name: str,
-        shield: "BasicItem",
-        person: "BasicUnit",
-        attribute: "BasicAttribute" = PerkType.shield.value,
-        status: "BasicAttribute" = PerkStatus.active.value,
-        modifier: "BasicAttribute" = PerkModifier.standard.value,
+        shield: "BaseItem",
+        person: "BaseUnit",
+        attribute: "BaseAttribute" = PerkType.shield.value,
+        status: "BaseAttribute" = PerkStatus.active.value,
+        modifier: "BaseAttribute" = PerkModifier.standard.value,
         difficulty_value: int = 0,
+        texture_path: str = None,
     ):
         """Инициализация способности
 
@@ -360,9 +365,10 @@ class Armor(Perk):
             modifier=modifier,
             person=person,
             difficulty_dice=difficulty_dice,
+            texture_path=texture_path,
         )
 
-    def action(self, target: "BasicUnit", **kwargs: "F_spec.kwargs") -> None:
+    def action(self, target: "BaseUnit", **kwargs: "F_spec.kwargs") -> None:
         """Воздействие на цель
         Щит используется для активации защитной стойки
         Добавляет дополнительную броню, но тратит ход
@@ -381,12 +387,13 @@ class Elemental(Perk):
     def __init__(
         self,
         name: str,
-        spell: "BasicItem",
-        person: "BasicUnit",
-        attribute: "BasicAttribute" = PerkType.elemental.value,
-        status: "BasicAttribute" = PerkStatus.active.value,
-        modifier: "BasicAttribute" = PerkModifier.standard.value,
+        spell: "BaseItem",
+        person: "BaseUnit",
+        attribute: "BaseAttribute" = PerkType.elemental.value,
+        status: "BaseAttribute" = PerkStatus.active.value,
+        modifier: "BaseAttribute" = PerkModifier.standard.value,
         difficulty_value: int = SPELL_ROLL_DIFFICULTY,
+        texture_path: str = None,
     ):
         """Инициализация способности
 
@@ -408,9 +415,10 @@ class Elemental(Perk):
             modifier=modifier,
             person=person,
             difficulty_dice=difficulty_dice,
+            texture_path=texture_path,
         )
 
-    def action(self, target: "BasicUnit", **kwargs: "F_spec.kwargs") -> None:
+    def action(self, target: "BaseUnit", **kwargs: "F_spec.kwargs") -> None:
         """Воздействие на цель
         Заклинание должно пройти проверку на попадание, иначе нанесет половину урона
         Урон заклинания будет снижен защитой от магии цели (даже лечение), но не ниже 0
@@ -464,14 +472,14 @@ class Elemental(Perk):
         print(f"И нанес {value} урона")
 
 
-class PerkCombination(BasicPerk):
+class PerkCombination(BasePerk):
     """Модель способности - комбинированная атака (оружие + заклинание)"""
 
     def __init__(
         self,
         name: str,
-        main_perk: BasicPerk,
-        effects: Iterable[BasicPerk],
+        main_perk: BasePerk,
+        effects: Iterable[BasePerk],
     ):
         """Инициализация способности
 
@@ -486,11 +494,12 @@ class PerkCombination(BasicPerk):
             attribute=main_perk.attribute,
             status=main_perk.status,
             modifier=main_perk.modifier,
+            texture_path=main_perk.texture,
         )
         self.main_perk = main_perk
         self.effects = effects
 
-    def activate(self, target: "BasicUnit", **kwargs: "F_spec.kwargs"):
+    def activate(self, target: "BaseUnit", **kwargs: "F_spec.kwargs"):
         """Воздействие на цель
         Заклинание должно пройти проверку на попадание, иначе нанесет половину урона
         При критическом ударе кубик урона кидается дважды
@@ -512,7 +521,7 @@ class PerkCombination(BasicPerk):
             effect.activate(target=target, **kwargs)
         self.status = PerkStatus.done.value
 
-    def change_attribute(self, value: "BasicAttribute") -> None:
+    def change_attribute(self, value: "BaseAttribute") -> None:
         """Изменить тип способности
 
         Args:
@@ -520,7 +529,7 @@ class PerkCombination(BasicPerk):
         """
         self.attribute = value
 
-    def change_status(self, value: "BasicAttribute") -> None:
+    def change_status(self, value: "BaseAttribute") -> None:
         """Изменить статус способности
 
         Args:
@@ -528,7 +537,7 @@ class PerkCombination(BasicPerk):
         """
         self.status = value
 
-    def change_modifier(self, value: "BasicAttribute") -> None:
+    def change_modifier(self, value: "BaseAttribute") -> None:
         """Изменить модификатор способности
 
         Args:

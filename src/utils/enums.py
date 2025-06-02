@@ -1,7 +1,7 @@
-from src.abstractions.tools import BasicAttribute
+from src.abstractions.tools import BaseAttribute
 
 
-class MagicType(BasicAttribute):
+class MagicType(BaseAttribute):
     force = "force"
     fire = "fire"
     ice = "ice"
@@ -10,18 +10,20 @@ class MagicType(BasicAttribute):
     dark = "dark"
 
 
-class WeaponType(BasicAttribute):
+class WeaponType(BaseAttribute):
     heavy = "heavy"
     medium = "medium"
     light = "light"
     bow = "bow"
 
 
-class ArmorType(BasicAttribute):
-    shield = "shield"
+class ArmorType(BaseAttribute):
+    light_shield = "light_shield"
+    medium_shield = "medium_shield"
+    great_shield = "great_shield"
 
 
-class PerkType(BasicAttribute):
+class PerkType(BaseAttribute):
     melee = "melee"
     ranged = "ranged"
     elemental = "elemental"
@@ -30,35 +32,35 @@ class PerkType(BasicAttribute):
     effect = "effect"
 
 
-class PerkStatus(BasicAttribute):
+class PerkStatus(BaseAttribute):
     active = "active"
     done = "done"
     blocked = "blocked"
 
 
-class PerkModifier(BasicAttribute):
+class PerkModifier(BaseAttribute):
     standard = "standard"
     advantage = "advantage"
     vulnerability = "vulnerability"
 
 
-class Time(BasicAttribute):
+class Time(BaseAttribute):
     day = "day"
     night = "night"
 
 
-class ActionType(BasicAttribute):
+class ActionType(BaseAttribute):
     move = "move"
     use = "use"
     defend = "defend"
 
 
-class FigureStatus(BasicAttribute):
+class FigureStatus(BaseAttribute):
     alive = "alive"
     captive = "captive"
     killed = "killed"
 
 
-class ActionKWArgs(BasicAttribute):
+class ActionKWArgs(BaseAttribute):
     domain_bonus = "domain_power"
     building_bonus = "tower_defence"

@@ -1,6 +1,6 @@
 from random import randint
 
-from src.abstractions.dice import BasicDice, BasicRoll
+from src.abstractions.dice import BaseDice, BaseRoll
 from src.utils.constants import (
     BASE_CRITICAL_ROLL,
     CRITICAL_DICE_SIDE,
@@ -8,7 +8,7 @@ from src.utils.constants import (
 )
 
 
-class Dice(BasicDice):
+class Dice(BaseDice):
     """Модель многогранной кости"""
 
     def __init__(self, side: int = 4):
@@ -30,7 +30,7 @@ class Dice(BasicDice):
         return value
 
 
-class DifficultyDice(BasicDice):
+class DifficultyDice(BaseDice):
     """Модель многогранной кости на шанс попадания"""
 
     def __init__(self, side: int = 4):
@@ -58,7 +58,7 @@ class DifficultyDice(BasicDice):
         return value
 
 
-class StaticDice(BasicDice):
+class StaticDice(BaseDice):
     """Модель статичной кости"""
 
     def __init__(self, side: int = 4):
@@ -79,12 +79,12 @@ class StaticDice(BasicDice):
         return self.side
 
 
-class DiceRoll(BasicRoll):
+class DiceRoll(BaseRoll):
     """Модель броска кости"""
 
     def __init__(
         self,
-        dice: BasicDice,
+        dice: BaseDice,
         times: int = 1,
     ):
         """Инициализация броска кости

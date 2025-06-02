@@ -1,56 +1,70 @@
 from typing import TYPE_CHECKING
 
-from src.abstractions.sprite import BasicSprite
-from src.utils.constants import CELL_SIZE
+from src.abstractions.sprite import BaseImage
 
 if TYPE_CHECKING:
-    from src.abstractions.domain import BasicDomain
+    from src.abstractions.tools import SpriteCore
+    from src.abstractions.domain import BaseDomain
+    from src.abstractions.figure import BaseFigure
 
 
-class BasicBuilding(BasicSprite):
-    """Абстрактная модель здания"""
+class BaseBuilding(BaseImage):
+    """Абстрактная UI модель здания"""
 
     def __init__(
         self,
-        index: tuple[int, int],
-        name: str,
-        domain: "BasicDomain",
-        textures: str,
-        defence_bonus: int,
-        figure: BasicSprite = None,
+        core: "SpriteCore",
+        defence_bonus: int = 0,
+        figure: "BaseFigure" = None,
         can_change_domain: bool = True,
     ):
         """Инициализация здания
 
         Args:
-            index: позиция на доске
-            name: имя
-            domain: домен
-            textures: текстура
+            core: свойства графического объекта
             defence_bonus: бонус защиты
             figure: фигура
             can_change_domain: возможность сменить домен
         """
         super().__init__(
-            name=name + str(index),
-            index=index,
-            textures=textures,
-            row=index[0],
-            column=index[1],
-            width=round(CELL_SIZE * 0.8),
-            height=round(CELL_SIZE * 0.8),
-            domain=domain,
+            core=core,
         )
-        self.color = domain.color
-        self.figure = figure
-        self.can_change_domain = can_change_domain
-        self.defence_bonus = defence_bonus
+        self.with_border(width=3, color=core.domain.color)
+        self._figure = figure
+        self._can_change_domain = can_change_domain
+        self._defence_bonus = defence_bonus
 
-    def change_domain(self, target: "BasicDomain") -> None:
+    @property
+    def defence(self) -> int:
+        return self._defence_bonus
+
+    @property
+    def figure(self) -> "BaseFigure":
+        return self._figure
+
+    @figure.setter
+    def figure(self, value: BaseImage) -> None:
+        self._figure = value
+
+    @property
+    def can_change_domain(self) -> bool:
+        return self._can_change_domain
+
+    @property
+    def name(self) -> str:
+        """Напрямую извлечь имя спрайта"""
+        return self.core.name
+
+    @property
+    def index(self) -> tuple[int, int]:
+        """Напрямую извлечь индекс спрайта"""
+        return self.core.index
+
+    def change_domain(self, target: "BaseDomain") -> None:
         """Установить новый домен
 
         Args:
             target: домен
         """
-        self.domain = target
-        self.color = target.color
+        self.core.domain = target
+        self.with_border(width=3, color=self.core.domain.color)

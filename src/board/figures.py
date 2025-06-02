@@ -24,15 +24,14 @@ class Barbarian(Figure):
 
     def __init__(
         self,
-        domain: "Domain",
         index: tuple[int, int],
+        domain: "Domain",
     ):
         unit = UnitBarbarian()
-        textures = 'src/sprites/units/Barbarian.png'
         super().__init__(
-            domain=domain,
             index=index,
-            textures=textures,
+            domain=domain,
+            texture_path='src/sprites/units/Barbarian.png',
             unit=unit,
         )
 
@@ -41,15 +40,14 @@ class Bard(Figure):
 
     def __init__(
         self,
-        domain: "Domain",
         index: tuple[int, int],
+        domain: "Domain",
     ):
         unit = UnitBard()
-        textures = 'src/sprites/units/Bard.png'
         super().__init__(
-            domain=domain,
-            textures=textures,
             index=index,
+            domain=domain,
+            texture_path='src/sprites/units/Bard.png',
             unit=unit,
         )
 
@@ -58,15 +56,14 @@ class Cleric(Figure):
 
     def __init__(
         self,
-        domain: "Domain",
         index: tuple[int, int],
+        domain: "Domain",
     ):
         unit = UnitCleric()
-        textures = 'src/sprites/units/Cleric.png'
         super().__init__(
-            domain=domain,
-            textures=textures,
             index=index,
+            domain=domain,
+            texture_path='src/sprites/units/Cleric.png',
             unit=unit,
         )
 
@@ -75,15 +72,14 @@ class Druid(Figure):
 
     def __init__(
         self,
-        domain: "Domain",
         index: tuple[int, int],
+        domain: "Domain",
     ):
         unit = UnitDruid()
-        textures = 'src/sprites/units/Druid.png'
         super().__init__(
-            domain=domain,
-            textures=textures,
             index=index,
+            domain=domain,
+            texture_path='src/sprites/units/Druid.png',
             unit=unit,
         )
 
@@ -92,15 +88,14 @@ class Fighter(Figure):
 
     def __init__(
         self,
-        domain: "Domain",
         index: tuple[int, int],
+        domain: "Domain",
     ):
         unit = UnitFighter()
-        textures = 'src/sprites/units/Fighter.png'
         super().__init__(
-            domain=domain,
-            textures=textures,
             index=index,
+            domain=domain,
+            texture_path='src/sprites/units/Fighter.png',
             unit=unit,
         )
 
@@ -109,15 +104,14 @@ class Monk(Figure):
 
     def __init__(
         self,
-        domain: "Domain",
         index: tuple[int, int],
+        domain: "Domain",
     ):
         unit = UnitMonk()
-        textures = 'src/sprites/units/Monk.png'
         super().__init__(
-            domain=domain,
-            textures=textures,
             index=index,
+            domain=domain,
+            texture_path='src/sprites/units/Monk.png',
             unit=unit,
         )
 
@@ -126,15 +120,14 @@ class Paladin(Figure):
 
     def __init__(
         self,
-        domain: "Domain",
         index: tuple[int, int],
+        domain: "Domain",
     ):
         unit = UnitPaladin()
-        textures = 'src/sprites/units/Paladin.png'
         super().__init__(
-            domain=domain,
-            textures=textures,
             index=index,
+            domain=domain,
+            texture_path='src/sprites/units/Paladin.png',
             unit=unit,
         )
 
@@ -143,15 +136,14 @@ class Ranger(Figure):
 
     def __init__(
         self,
-        domain: "Domain",
         index: tuple[int, int],
+        domain: "Domain",
     ):
         unit = UnitRanger()
-        textures = 'src/sprites/units/Ranger.png'
         super().__init__(
-            domain=domain,
-            textures=textures,
             index=index,
+            domain=domain,
+            texture_path='src/sprites/units/Ranger.png',
             unit=unit,
         )
 
@@ -160,15 +152,14 @@ class Rogue(Figure):
 
     def __init__(
         self,
-        domain: "Domain",
         index: tuple[int, int],
+        domain: "Domain",
     ):
         unit = UnitRogue()
-        textures = 'src/sprites/units/Rogue.png'
         super().__init__(
-            domain=domain,
-            textures=textures,
             index=index,
+            domain=domain,
+            texture_path='src/sprites/units/Rogue.png',
             unit=unit,
         )
 
@@ -177,15 +168,14 @@ class Sorcerer(Figure):
 
     def __init__(
         self,
-        domain: "Domain",
         index: tuple[int, int],
+        domain: "Domain",
     ):
         unit = UnitSorcerer()
-        textures = 'src/sprites/units/Sorcerer.png'
         super().__init__(
-            domain=domain,
-            textures=textures,
             index=index,
+            domain=domain,
+            texture_path='src/sprites/units/Sorcerer.png',
             unit=unit,
         )
 
@@ -194,15 +184,14 @@ class Warlock(Figure):
 
     def __init__(
         self,
-        domain: "Domain",
         index: tuple[int, int],
+        domain: "Domain",
     ):
         unit = UnitWarlock()
-        textures = 'src/sprites/units/Warlock.png'
         super().__init__(
-            domain=domain,
-            textures=textures,
             index=index,
+            domain=domain,
+            texture_path='src/sprites/units/Warlock.png',
             unit=unit,
         )
 
@@ -211,15 +200,14 @@ class Wizard(Figure):
 
     def __init__(
         self,
-        domain: "Domain",
         index: tuple[int, int],
+        domain: "Domain",
     ):
         unit = UnitWizard()
-        textures = 'src/sprites/units/Wizard.png'
         super().__init__(
-            domain=domain,
-            textures=textures,
             index=index,
+            domain=domain,
+            texture_path='src/sprites/units/Wizard.png',
             unit=unit,
         )
 
@@ -228,7 +216,7 @@ def get_figures_position() -> dict[tuple[int, int], Type[Figure]]:
     figures_position: dict[tuple[int, int], Type[Figure]] = {}
     for row in range(1, 8):
         for column in range(1, 7):
-            index = (row, column)
+            index = (column, row)
             if row in (1, 7):
                 if column == 1:
                     figures_position[index] = Druid

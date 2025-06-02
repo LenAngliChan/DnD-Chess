@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Callable, TypeVar, ParamSpec
 from src.utils.enums import PerkModifier
 
 if TYPE_CHECKING:
-    from src.abstractions.perk import BasicPerk
+    from src.abstractions.perk import BasePerk
 
 F_spec = ParamSpec("F_spec")
 F_result = TypeVar("F_result")
@@ -15,7 +15,7 @@ def modify_perk_action(
 ) -> Callable[F_spec, F_result]:
     @wraps(func)
     def wrapper(*args: F_spec.args, **kwargs: F_spec.kwargs) -> F_result:
-        perk: "BasicPerk" = args[0]
+        perk: "BasePerk" = args[0]
         modifier = perk.modifier
         value = 0
         try:

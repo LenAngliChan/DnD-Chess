@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class BasicDice(ABC):
+class BaseDice(ABC):
     """Абстрактная модель кости"""
 
     def __init__(self, side: int):
@@ -22,10 +22,10 @@ class BasicDice(ABC):
         pass
 
 
-class BasicRoll(ABC):
+class BaseRoll(ABC):
     """Абстрактная модель броска кости"""
 
-    def __init__(self, dice: BasicDice):
+    def __init__(self, dice: BaseDice):
         """Инициализация броска кости
 
         Args:

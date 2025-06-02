@@ -1,22 +1,22 @@
 from typing import TYPE_CHECKING
 
-from src.abstractions.item import BasicItem
+from src.abstractions.item import BaseItem
 from src.models.dice import DiceRoll, Dice, StaticDice
 from src.utils.enums import MagicType, WeaponType, ArmorType
 
 if TYPE_CHECKING:
-    from src.abstractions.tools import BasicAttribute
-    from src.abstractions.dice import BasicDice
+    from src.abstractions.tools import BaseAttribute
+    from src.abstractions.dice import BaseDice
 
 
-class Item(BasicItem):
+class Item(BaseItem):
     """Модель предмета"""
 
     def __init__(
         self,
         name: str,
-        value_dice: "BasicDice",
-        attribute: "BasicAttribute",
+        value_dice: "BaseDice",
+        attribute: "BaseAttribute",
         times: int = 1,
     ):
         """Инициализация предмета
@@ -51,7 +51,7 @@ class Weapon(Item):
         self,
         name: str,
         damage: int = 4,
-        weapon_type: "BasicAttribute" = WeaponType.medium.value,
+        weapon_type: "BaseAttribute" = WeaponType.medium.value,
         times: int = 1,
     ):
         """Инициализация оружия
@@ -78,7 +78,7 @@ class Spell(Item):
         self,
         name: str,
         damage: int = 4,
-        magic_type: "BasicAttribute" = MagicType.fire.value,
+        magic_type: "BaseAttribute" = MagicType.fire.value,
         times: int = 1,
     ):
         """Инициализация заклинания
@@ -105,7 +105,7 @@ class Armor(Item):
         self,
         name: str,
         defence: int = 4,
-        armor_type: "BasicAttribute" = ArmorType.shield.value,
+        armor_type: "BaseAttribute" = ArmorType.medium_shield.value,
     ):
         """Инициализация брони
 

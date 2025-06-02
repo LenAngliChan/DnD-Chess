@@ -4,13 +4,13 @@ from typing import TYPE_CHECKING
 from src.utils.constants import BASE_CHARACTERISTIC
 
 if TYPE_CHECKING:
-    from src.abstractions.item import BasicAttribute
+    from src.abstractions.item import BaseAttribute
     from src.utils.characters import Character
-    from src.abstractions.perk import BasicPerk
+    from src.abstractions.perk import BasePerk
     from collections import UserDict
 
 
-class BasicAbility(ABC):
+class BaseAbility(ABC):
     """Абстрактная модель характеристик персонажа"""
 
     def __init__(
@@ -38,7 +38,7 @@ class BasicAbility(ABC):
         self.base_magic_resistance = character.base_magic_resistance
 
     @abstractmethod
-    def save_throw(self, attribute: "BasicAttribute") -> int:
+    def save_throw(self, attribute: "BaseAttribute") -> int:
         """Спасбросок
 
         Args:
@@ -50,7 +50,7 @@ class BasicAbility(ABC):
         pass
 
     @abstractmethod
-    def mastery(self, attribute: "BasicAttribute" = None) -> int:
+    def mastery(self, attribute: "BaseAttribute" = None) -> int:
         """Мастерство
 
         Args:
@@ -62,14 +62,14 @@ class BasicAbility(ABC):
         pass
 
 
-class BasicUnit(ABC):
+class BaseUnit(ABC):
     """Абстрактная модель персонажа"""
 
     def __init__(
         self,
         name: str,
-        ability: BasicAbility,
-        perks: "UserDict[str, BasicPerk]" = None,
+        ability: BaseAbility,
+        perks: "UserDict[str, BasePerk]" = None,
         level: int = 1,
     ):
         """Инициализация персонажа

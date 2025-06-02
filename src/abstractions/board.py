@@ -2,26 +2,27 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Iterable, Optional
 
 if TYPE_CHECKING:
-    from src.abstractions.domain import BasicDomain
-    from src.abstractions.sprite import BasicSprite
-    from src.abstractions.figure import BasicFigure
-    from src.abstractions.tools import BasicAttribute
-    from src.abstractions.action import BasicAction
+    from src.abstractions.domain import BaseDomain
+    from src.abstractions.sprite import BaseImage
+    from src.abstractions.cell import BaseCell
+    from src.abstractions.figure import BaseFigure
+    from src.abstractions.tools import BaseAttribute
+    from src.abstractions.action import BaseAction
     from collections import UserDict
 
 
-class BasicBoard(ABC):
+class BaseBoard(ABC):
     """Абстрактная модель доски"""
 
     def __init__(
         self,
-        blue_domain: "BasicDomain",
-        red_domain: "BasicDomain",
-        grey_domain: "BasicDomain",
-        time: "BasicAttribute",
-        cells: "UserDict[tuple[int, int], BasicSprite]" = None,
-        figures: "UserDict[str, BasicFigure]" = None,
-        buildings: "UserDict[tuple[int, int], BasicSprite]" = None,
+        blue_domain: "BaseDomain",
+        red_domain: "BaseDomain",
+        grey_domain: "BaseDomain",
+        time: "BaseAttribute",
+        cells: "UserDict[tuple[int, int], BaseCell]" = None,
+        figures: "UserDict[str, BaseFigure]" = None,
+        buildings: "UserDict[tuple[int, int], BaseImage]" = None,
     ):
         """Инициализация доски
 
@@ -34,15 +35,31 @@ class BasicBoard(ABC):
             figures: фигуры доски
             buildings: здания доски
         """
-        self.blue_domain = blue_domain
-        self.red_domain = red_domain
-        self.grey_domain = grey_domain
-        self.time = time
-        self.cells = cells
-        self.figures = figures
-        self.buildings = buildings
-        self.current_cell: BasicSprite | None = None
-        self.current_action: BasicAction | None = None
+        self._blue_domain = blue_domain
+        self._red_domain = red_domain
+        self._grey_domain = grey_domain
+        self._time = time
+        self._cells = cells
+        self._figures = figures
+        self._buildings = buildings
+        self._current_cell: Optional["BaseCell"] = None
+        self._current_action: Optional["BaseAction"] = None
+
+    @property
+    def current_cell(self) -> Optional["BaseCell"]:
+        return self._current_cell
+
+    @property
+    def current_action(self) -> Optional["BaseAction"]:
+        return self._current_action
+
+    def get_cells(self) -> "UserDict[tuple[int, int], BaseCell]":
+        """Получить список клеток доски
+
+        Returns:
+            dict: список клеток
+        """
+        return self._cells
 
     @abstractmethod
     def initialize_cells(self) -> None:
@@ -67,7 +84,7 @@ class BasicBoard(ABC):
     @abstractmethod
     def select_cell(
         self,
-        cell: "BasicSprite",
+        cell: "BaseCell",
     ) -> None:
         """Выбрать клетку
 
@@ -79,7 +96,7 @@ class BasicBoard(ABC):
     @abstractmethod
     def select_action(
         self,
-        action: "BasicAction",
+        action: "BaseAction",
     ) -> None:
         """Выбрать действие
 
@@ -91,7 +108,7 @@ class BasicBoard(ABC):
     @abstractmethod
     def select_target(
         self,
-        target: "BasicSprite",
+        target: "BaseCell",
     ) -> None:
         """Выбрать цель действия
 
@@ -101,7 +118,7 @@ class BasicBoard(ABC):
         pass
 
     @abstractmethod
-    def get_figure_action_list(self) -> Optional["UserDict[str, BasicAction]"]:
+    def get_figure_action_list(self) -> Optional["UserDict[str, BaseAction]"]:
         """Получить список действий фигуры
 
         Returns:
@@ -110,7 +127,7 @@ class BasicBoard(ABC):
         pass
 
     @abstractmethod
-    def get_cell_neighbors(self) -> Iterable["BasicSprite"]:
+    def get_cell_neighbors(self, value: int = 1) -> Iterable["BaseCell"]:
         """Получить список допустимых клеток в качестве цели (соседей)
 
         Returns:

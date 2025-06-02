@@ -1,67 +1,67 @@
 from typing import TYPE_CHECKING, Iterable
 from arcade import color
 
-from src.abstractions.domain import BasicDomain
+from src.abstractions.domain import BaseDomain
 from src.models.collection import FigureCollection
 from src.utils.constants import BASE_DOMAIN_POWER
 
 if TYPE_CHECKING:
-    from src.abstractions.figure import BasicFigure
+    from arcade.types import Color
+    from src.abstractions.figure import BaseFigure
 
 
-class Domain(BasicDomain):
+class Domain(BaseDomain):
     """Модель домена"""
 
     def __init__(
         self,
         name: str,
-        textures: str,
-        domain_color: color = color.GRAY,
+        texture_path: str,
+        domain_color: "Color" = color.GRAY,
         power: int = BASE_DOMAIN_POWER,
     ):
         """Инициализация домена
 
         Args:
             name: имя
-            textures: текстура
+            texture_path: путь к текстурам
             domain_color: цвет домена
             power: мощь домена
         """
         super().__init__(
             name=name,
-            textures=textures,
+            texture_path=texture_path,
             domain_color=domain_color,
             power=power,
         )
 
-    def set_figures(self, figures: Iterable["BasicFigure"]) -> None:
+    def set_figures(self, figures: Iterable["BaseFigure"]) -> None:
         """Установить фигуры домена
 
         Args:
             figures: список фигур
         """
-        self.figures = FigureCollection(figures=figures)
-        self.prisoners = FigureCollection()
+        self._figures = FigureCollection(figures=figures)
+        self._prisoners = FigureCollection()
 
-    def kill_figure(self, figure: "BasicFigure") -> None:
+    def kill_figure(self, figure: "BaseFigure") -> None:
         """Убить фигуру домена
 
         Args:
             figure: фигура
         """
-        figure = self.figures.pop(figure.name)
+        figure = self._figures.pop(figure.name)
         figure.kill_self()
-        return figure
 
-    def get_prisoner(self, figure: "BasicFigure") -> None:
+    def get_prisoner(self, figure: "BaseFigure") -> None:
         """Установить фигуру-пленника домена
 
         Args:
             figure: фигура
         """
-        self.prisoners[figure.name] = figure
+        self._prisoners[figure.name] = figure
 
     def end_circle(self):
         """Завершить цикл ходов домена, начав новый"""
-        for figure in self.figures.values():
+        for figure in self._figures.values():
             figure.end_circle()

@@ -2,18 +2,18 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from src.abstractions.dice import BasicRoll
-    from src.abstractions.tools import BasicAttribute
+    from src.abstractions.dice import BaseRoll
+    from src.abstractions.tools import BaseAttribute
 
 
-class BasicItem(ABC):
+class BaseItem(ABC):
     """Абстрактная модель предмета"""
 
     def __init__(
         self,
         name: str,
-        value: "BasicRoll",
-        attribute: "BasicAttribute",
+        value: "BaseRoll",
+        attribute: "BaseAttribute",
     ):
         """Инициализация предмета
 

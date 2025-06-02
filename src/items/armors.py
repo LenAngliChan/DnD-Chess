@@ -8,7 +8,7 @@ class LightShield(Armor):
         super().__init__(
             name="LightShield",
             defence=2,
-            armor_type=ArmorType.shield.value,
+            armor_type=ArmorType.light_shield.value,
         )
 
 
@@ -18,7 +18,7 @@ class MediumShield(Armor):
         super().__init__(
             name="MediumShield",
             defence=4,
-            armor_type=ArmorType.shield.value,
+            armor_type=ArmorType.medium_shield.value,
         )
 
 
@@ -28,5 +28,5 @@ class GreatShield(Armor):
         super().__init__(
             name="GreatShield",
             defence=6,
-            armor_type=ArmorType.shield.value,
+            armor_type=ArmorType.great_shield.value,
         )

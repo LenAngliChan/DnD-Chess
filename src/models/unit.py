@@ -1,17 +1,17 @@
 from typing import TYPE_CHECKING
 
-from src.abstractions.unit import BasicAbility, BasicUnit
+from src.abstractions.unit import BaseAbility, BaseUnit
 from src.utils.enums import WeaponType, MagicType
 from models.dice import DiceRoll, DifficultyDice
 from src.utils.constants import SAVE_THROW_DICE_SIDE
 
 if TYPE_CHECKING:
-    from src.abstractions.tools import BasicAttribute
+    from src.abstractions.tools import BaseAttribute
     from src.models.collection import PerkCollection
     from src.utils.characters import Character
 
 
-class Ability(BasicAbility):
+class Ability(BaseAbility):
     """Модель характеристик персонажа"""
 
     def __init__(
@@ -29,7 +29,7 @@ class Ability(BasicAbility):
         dice = DifficultyDice(side=SAVE_THROW_DICE_SIDE)
         self.save_roll = DiceRoll(dice=dice)
 
-    def save_throw(self, attribute: "BasicAttribute") -> int:
+    def save_throw(self, attribute: "BaseAttribute") -> int:
         """Спасбросок
         Рассчитывается как:
             базовый спасбросок (бросок кубика)
@@ -80,7 +80,7 @@ class Ability(BasicAbility):
 
         return value
 
-    def mastery(self, attribute: "BasicAttribute" = None) -> int:
+    def mastery(self, attribute: "BaseAttribute" = None) -> int:
         """Мастерство
         Рассчитывается как:
             бонус характеристики
@@ -131,7 +131,7 @@ class Ability(BasicAbility):
         return (value - self.base_characteristic) // 2
 
 
-class Unit(BasicUnit):
+class Unit(BaseUnit):
     """Модель персонажа"""
 
     def __init__(
