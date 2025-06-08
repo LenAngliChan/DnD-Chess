@@ -1,24 +1,19 @@
-from typing import TYPE_CHECKING, NamedTuple, Dict
+from typing import TYPE_CHECKING
 from arcade.gui import UIGridLayout
 
+from src.utils.tools import Entry
 from src.gui.button import StartButton, CircleButton
-from models.text import ScrollableTextArea
+from src.models.text import ScrollableTextArea
 from src.gui.action_box import ActionBox
 from src.utils.constants import (
     CELL_SIZE,
     GRID_ROW_COUNT,
     GRID_COLUMN_COUNT,
 )
+from src.utils.messages import START_GAME_MSG
 
 if TYPE_CHECKING:
-    from arcade.gui.widgets import UIWidget
     from src.abstractions.board import BaseBoard
-    from src.abstractions.text import BaseScrollableTextArea
-
-
-class Entry(NamedTuple):
-    child: "UIWidget"
-    data: Dict
 
 
 class BoardGrid(UIGridLayout):
@@ -39,7 +34,7 @@ class BoardGrid(UIGridLayout):
         # информационное табло
         self._info_text = self.add(
             child=ScrollableTextArea(
-                text="Game_Info",
+                text=START_GAME_MSG,
             ),
             row=3,
             column=8,
@@ -108,10 +103,8 @@ class BoardGrid(UIGridLayout):
         for cell in self._board.get_cells().values():
             self.add(
                 child=cell,
-                # align_x=cell.index[1] * CELL_SIZE,
-                # align_y=cell.index[0] * CELL_SIZE,
-                row=cell.index[1],
-                column=cell.index[0],
+                row=cell.index.row,
+                column=cell.index.column,
             )
 
     def fill_buttons(self) -> None:
@@ -121,8 +114,6 @@ class BoardGrid(UIGridLayout):
                 index=(7, 8),
                 board=self._board,
             ),
-            # align_x=start_index[1] * CELL_SIZE,
-            # align_y=start_index[0] * CELL_SIZE,
             row=7,
             column=8,
             align_center_y=True,

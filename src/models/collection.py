@@ -49,7 +49,7 @@ class CellCollection(UserDict):
     ):
         if cells:
             collection = {
-                cell.index: cell
+                cell.index.name: cell
                 for cell in cells
             }
         else:
@@ -65,7 +65,7 @@ class BuildingCollection(UserDict):
     ):
         if buildings:
             collection = {
-                building.index: building
+                building.index.name: building
                 for building in buildings
             }
         else:

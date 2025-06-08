@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
-from arcade import Sprite, color
+from arcade import Sprite
 from arcade.gui.widgets.image import UIImage
 from arcade.gui import UISpriteWidget
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from src.abstractions.tools import SpriteCore
+    from utils.tools import SpriteCore
     from src.abstractions.domain import BaseDomain
 
 

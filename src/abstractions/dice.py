@@ -10,7 +10,7 @@ class BaseDice(ABC):
         Args:
             side: количество граней кости
         """
-        self.side = side
+        self._side = side
 
     @abstractmethod
     def roll(self) -> int:
@@ -31,7 +31,7 @@ class BaseRoll(ABC):
         Args:
             dice: кость
         """
-        self.dice = dice
+        self._dice = dice
 
     @abstractmethod
     def action(self) -> int:

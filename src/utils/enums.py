@@ -1,66 +1,67 @@
-from src.abstractions.tools import BaseAttribute
+from utils.tools import BaseAttribute
 
 
 class MagicType(BaseAttribute):
-    force = "force"
-    fire = "fire"
-    ice = "ice"
-    psychic = "psychic"
-    radiant = "radiant"
-    dark = "dark"
+    force = "Сила"
+    fire = "Огонь"
+    ice = "Лед"
+    psychic = "Психический"
+    radiant = "Свет"
+    dark = "Тьма"
 
 
 class WeaponType(BaseAttribute):
-    heavy = "heavy"
-    medium = "medium"
-    light = "light"
-    bow = "bow"
+    heavy = "Тяжелый"
+    medium = "Фехтовальный"
+    light = "Легкий"
+    ranged = "Дальний"
 
 
 class ArmorType(BaseAttribute):
-    light_shield = "light_shield"
-    medium_shield = "medium_shield"
-    great_shield = "great_shield"
+    light_shield = "Легкий"
+    medium_shield = "Средний"
+    great_shield = "Тяжелый"
 
 
 class PerkType(BaseAttribute):
-    melee = "melee"
-    ranged = "ranged"
-    elemental = "elemental"
-    heal = "heal"
-    shield = "shield"
-    effect = "effect"
+    melee = "Контакное"
+    ranged = "Стрелковое"
+    elemental = "Магия"
+    heal = "Лечение"
+    shield = "Защита"
+    effect = "Эффект"
 
 
 class PerkStatus(BaseAttribute):
-    active = "active"
-    done = "done"
-    blocked = "blocked"
+    active = "Активный"
+    done = "Использован"
+    blocked = "Заблокирован"
 
 
 class PerkModifier(BaseAttribute):
-    standard = "standard"
-    advantage = "advantage"
-    vulnerability = "vulnerability"
+    standard = "Обычный"
+    advantage = "Преимущество"
+    vulnerability = "Уязвимость"
 
 
 class Time(BaseAttribute):
-    day = "day"
-    night = "night"
+    day = "Красный"
+    night = "Синий"
+    dragon = "Серый"
 
 
 class ActionType(BaseAttribute):
-    move = "move"
-    use = "use"
-    defend = "defend"
+    move = "Движение"
+    use = "Использование"
+    defend = "Пропуск хода"
 
 
 class FigureStatus(BaseAttribute):
-    alive = "alive"
-    captive = "captive"
-    killed = "killed"
+    alive = "Живой"
+    captive = "Захвачен"
+    killed = "Убит"
 
 
 class ActionKWArgs(BaseAttribute):
-    domain_bonus = "domain_power"
-    building_bonus = "tower_defence"
+    domain_bonus = "Сила Домена"
+    building_bonus = "Защита Башни"

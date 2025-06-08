@@ -26,7 +26,7 @@ class Dice(BaseDice):
         Returns:
             int: значение
         """
-        value = randint(a=1, b=self.side)
+        value = randint(a=1, b=self._side)
         return value
 
 
@@ -50,8 +50,8 @@ class DifficultyDice(BaseDice):
         Returns:
             int: значение
         """
-        value = randint(a=1, b=self.side)
-        if value == self.side:
+        value = randint(a=1, b=self._side)
+        if value == self._side:
             value = BASE_CRITICAL_ROLL
         elif value == 1:
             value = -BASE_CRITICAL_ROLL
@@ -76,7 +76,7 @@ class StaticDice(BaseDice):
         Returns:
             int: значение
         """
-        return self.side
+        return self._side
 
 
 class DiceRoll(BaseRoll):
@@ -94,7 +94,7 @@ class DiceRoll(BaseRoll):
             times: количество бросков
         """
         super().__init__(dice=dice)
-        self.times = times
+        self._times = times
 
     def action(self) -> int:
         """Бросить кость
@@ -104,8 +104,8 @@ class DiceRoll(BaseRoll):
             int: результат
         """
         value = 0
-        for time in range(1, self.times + 1):
-            value += self.dice.roll()
+        for time in range(1, self._times + 1):
+            value += self._dice.roll()
         return value
 
 
@@ -115,4 +115,8 @@ class CritRoll(DiceRoll):
     def __init__(self):
         dice = DifficultyDice(side=CRITICAL_DICE_SIDE)
         super().__init__(dice=dice)
-        self.resistance = CRITICAL_ROLL_RESISTANCE
+        self._resistance = CRITICAL_ROLL_RESISTANCE
+
+    @property
+    def resistance(self) -> int:
+        return self._resistance

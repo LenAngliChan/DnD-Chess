@@ -1,9 +1,11 @@
 from typing import TYPE_CHECKING
 
 from src.abstractions.cell import BaseCell, BaseCellSprite
-from src.abstractions.tools import SpriteCore
+from src.utils.tools import SpriteCore
+from src.utils.descriptions import CELL_NAME
 
 if TYPE_CHECKING:
+    from src.utils.tools import Index
     from src.abstractions.domain import BaseDomain
     from src.abstractions.figure import BaseFigure
     from src.abstractions.building import BaseBuilding
@@ -31,7 +33,7 @@ class Cell(BaseCell):
 
     def __init__(
         self,
-        index: tuple[int, int],
+        index: "Index",
         domain: "BaseDomain",
         building: "BaseBuilding" = None,
         figure: "BaseFigure" = None,
@@ -44,11 +46,11 @@ class Cell(BaseCell):
             figure: фигура клетки
         """
         core = SpriteCore(
-            name="Cell" + str(index),
+            name=CELL_NAME.format(index=index),
             index=index,
+            texture=domain.texture,
             domain=domain,
         )
-        core.texture = domain.texture
         sprite = CellSprite(
             core=core,
         )
@@ -60,5 +62,5 @@ class Cell(BaseCell):
 
     def capture(self, figure: "BaseFigure") -> None:
         """Захватить клетку"""
-        self.figure = figure
+        self.figure = figure    # через setter, там доп. логика
         self.change_domain(target=figure.domain)

@@ -7,14 +7,9 @@ WINDOW_HEIGHT = CELL_SIZE * 8
 GRID_ROW_COUNT = 8
 GRID_COLUMN_COUNT = 10
 WINDOW_TITLE = "DnD-Chess"
-DEFAULT_FONT_SIZE = 12
+DEFAULT_FONT_SIZE = 10
 DEFAULT_FONT_NAME = "Kenney Pixel Square"
 DEFAULT_TEXT_WIDTH = CELL_SIZE * 3
-TEXTURE_SWITCH_GREEN = ":resources:gui_basic_assets/toggle/green.png"
-TEXTURE_SWITCH_RED = ":resources:gui_basic_assets/toggle/red.png"
-TEXTURE_RED_BUTTON_NORMAL = ":resources:gui_basic_assets/button/red_normal.png"
-TEXTURE_RED_BUTTON_HOVER = ":resources:gui_basic_assets/button/red_hover.png"
-TEXTURE_RED_BUTTON_PRESS = ":resources:gui_basic_assets/button/red_press.png"
 
 # базовые значения костей
 BASE_CRITICAL_ROLL = 99

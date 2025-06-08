@@ -1,13 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Optional
-from arcade import load_texture, Texture
+from typing import TYPE_CHECKING
+
+from src.utils.descriptions import PERK_LONG_DESC
 
 if TYPE_CHECKING:
-    from arcade.types import PathOrTexture
+    from arcade import Texture
     from src.abstractions.item import BaseItem
-    from src.abstractions.tools import BaseAttribute
+    from utils.tools import BaseAttribute
     from src.abstractions.unit import BaseUnit
-    from src.abstractions.tools import F_spec
+    from utils.tools import F_spec
 
 
 class BasePerk(ABC):
@@ -16,35 +17,72 @@ class BasePerk(ABC):
     def __init__(
         self,
         name: str,
+        title: str,
         item: "BaseItem",
         attribute: "BaseAttribute",
         status: "BaseAttribute",
         modifier: "BaseAttribute",
-        texture_path: "PathOrTexture" = None,
+        texture: "Texture",
     ):
         """Инициализация способности
 
         Args:
-            name: имя
+            name: имя способности
+            title: имя способности для отображения на gui
             item: предмет
             attribute: тип способности
             status: статус способности
             modifier: модификатор способности
+            texture: иконка способности
         """
-        self.name = name
-        self.item = item
-        self.attribute = attribute
-        self.status = status
-        self.modifier = modifier
-        if texture_path:
-            if isinstance(texture_path, Texture):
-                self._texture = texture_path
-            else:
-                self._texture = load_texture(file_path=texture_path)
+        self._name = name
+        self._title = title
+        self._item = item
+        self._attribute = attribute
+        self._status = status
+        self._modifier = modifier
+        self._texture = texture
+
+    def __str__(self) -> str:
+        """Полное описание способности"""
+        return PERK_LONG_DESC.format(
+            title=self._title,
+            item=self._item.title,
+            type=self._item.attribute,
+        )
 
     @property
-    def texture(self) -> Optional["Texture"]:
+    def desc(self) -> str:
+        """Краткое описание способности"""
+        return self._title
+
+    @property
+    def name(self) -> str:
+        """Имя способности"""
+        return self._name
+
+    @property
+    def title(self) -> str:
+        """Наименование"""
+        return self._title
+
+    @property
+    def texture(self) -> "Texture":
+        """Текстуры"""
         return self._texture
+
+    @property
+    def attribute(self) -> "BaseAttribute":
+        """Атрибут"""
+        return self._attribute
+
+    @property
+    def modifier(self) -> "BaseAttribute":
+        return self._modifier
+
+    @property
+    def status(self) -> "BaseAttribute":
+        return self._status
 
     @abstractmethod
     def activate(self, target: "BaseUnit", **kwargs: "F_spec.kwargs") -> None:

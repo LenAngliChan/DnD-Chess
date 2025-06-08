@@ -5,7 +5,7 @@ from src.models.dice import DiceRoll, Dice, StaticDice
 from src.utils.enums import MagicType, WeaponType, ArmorType
 
 if TYPE_CHECKING:
-    from src.abstractions.tools import BaseAttribute
+    from utils.tools import BaseAttribute
     from src.abstractions.dice import BaseDice
 
 
@@ -15,6 +15,7 @@ class Item(BaseItem):
     def __init__(
         self,
         name: str,
+        title: str,
         value_dice: "BaseDice",
         attribute: "BaseAttribute",
         times: int = 1,
@@ -23,6 +24,7 @@ class Item(BaseItem):
 
         Args:
             name: имя предмета
+            title: имя предмета для отображения на gui
             value_dice: кость (значение предмета)
             attribute: тип предмета
             times: количество бросков кости
@@ -30,6 +32,7 @@ class Item(BaseItem):
         value = DiceRoll(dice=value_dice, times=times)
         super().__init__(
             name=name,
+            title=title,
             value=value,
             attribute=attribute,
         )
@@ -41,7 +44,7 @@ class Item(BaseItem):
         Returns:
             int: значение
         """
-        return self.value.action()
+        return self._value.action()
 
 
 class Weapon(Item):
@@ -50,6 +53,7 @@ class Weapon(Item):
     def __init__(
         self,
         name: str,
+        title: str,
         damage: int = 4,
         weapon_type: "BaseAttribute" = WeaponType.medium.value,
         times: int = 1,
@@ -58,6 +62,7 @@ class Weapon(Item):
 
         Args:
             name: имя оружия
+            title: имя предмета для отображения на gui
             damage: урон оружия
             weapon_type: тип оружия
             times: количество бросков кости
@@ -65,6 +70,7 @@ class Weapon(Item):
         value_dice = Dice(side=damage)
         super().__init__(
             name=name,
+            title=title,
             value_dice=value_dice,
             attribute=weapon_type,
             times=times,
@@ -77,6 +83,7 @@ class Spell(Item):
     def __init__(
         self,
         name: str,
+        title: str,
         damage: int = 4,
         magic_type: "BaseAttribute" = MagicType.fire.value,
         times: int = 1,
@@ -85,6 +92,7 @@ class Spell(Item):
 
         Args:
             name: имя заклинания
+            title: имя предмета для отображения на gui
             damage: урон заклинания
             magic_type: тип заклинания
             times: количество бросков кости
@@ -92,6 +100,7 @@ class Spell(Item):
         value_dice = Dice(side=damage)
         super().__init__(
             name=name,
+            title=title,
             value_dice=value_dice,
             attribute=magic_type,
             times=times,
@@ -104,6 +113,7 @@ class Armor(Item):
     def __init__(
         self,
         name: str,
+        title: str,
         defence: int = 4,
         armor_type: "BaseAttribute" = ArmorType.medium_shield.value,
     ):
@@ -111,12 +121,14 @@ class Armor(Item):
 
         Args:
             name: имя брони
+            title: имя предмета для отображения на gui
             defence: защита брони
             armor_type: тип брони
         """
         value_dice = StaticDice(side=defence)
         super().__init__(
             name=name,
+            title=title,
             value_dice=value_dice,
             attribute=armor_type,
         )

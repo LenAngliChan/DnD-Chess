@@ -1,14 +1,14 @@
 from typing import TYPE_CHECKING
 
 from src.abstractions.unit import BaseAbility, BaseUnit
-from src.utils.enums import WeaponType, MagicType
-from models.dice import DiceRoll, DifficultyDice
+from src.utils.enums import WeaponType, MagicType, PerkStatus
+from src.models.dice import DiceRoll, DifficultyDice
 from src.utils.constants import SAVE_THROW_DICE_SIDE
 
 if TYPE_CHECKING:
-    from src.abstractions.tools import BaseAttribute
+    from utils.tools import BaseAttribute
     from src.models.collection import PerkCollection
-    from src.utils.characters import Character
+    from src.utils.characters import Characteristic
 
 
 class Ability(BaseAbility):
@@ -16,15 +16,15 @@ class Ability(BaseAbility):
 
     def __init__(
         self,
-        character: "Character",
+        characteristic: "Characteristic",
     ):
         """Инициализация характеристик персонажа
 
         Args:
-            character: базовые характиристики персонажа
+            characteristic: базовые характиристики персонажа
         """
         super().__init__(
-            character=character,
+            characteristic=characteristic,
         )
         dice = DifficultyDice(side=SAVE_THROW_DICE_SIDE)
         self.save_roll = DiceRoll(dice=dice)
@@ -56,22 +56,22 @@ class Ability(BaseAbility):
         # спасбросок по умению
         if isinstance(attribute, WeaponType):
             # против оружия спасбросок по ловкости
-            ability = self.dexterity
+            ability = self._dexterity
         elif attribute == MagicType.force.value:
             # против силовых заклинаний спасбросок по силе
-            ability = self.strength
+            ability = self._strength
         elif attribute == MagicType.fire.value:
             # против огненных заклинаний спасбросок по ловкости
-            ability = self.dexterity
+            ability = self._dexterity
         elif attribute == MagicType.ice.value:
             # против ледяных заклинаний спасбросок по выносливости
-            ability = self.constitution
+            ability = self._constitution
         elif attribute == MagicType.psychic.value:
             # против психических атак спасбросок по итнеллекту
-            ability = self.intelligence
+            ability = self._intelligence
         elif attribute == MagicType.radiant.value:
             # против заклинаний света спасбросок по мудрости
-            ability = self.wisdom
+            ability = self._wisdom
         else:
             ability = None
 
@@ -95,25 +95,25 @@ class Ability(BaseAbility):
         # бонус мастерства
         if attribute == WeaponType.heavy.value:
             # мастерство тяжелым оружием зависит от силы
-            ability = self.strength
+            ability = self._strength
         elif attribute == WeaponType.medium.value:
             # мастерство фехтовальным оружием зависит от силы или ловкости (смотря что больше)
-            ability = max(self.dexterity, self.strength)
-        elif attribute in (WeaponType.bow.value, WeaponType.light.value):
+            ability = max(self._dexterity, self._strength)
+        elif attribute in (WeaponType.ranged.value, WeaponType.light.value):
             # мастерство легким оружием зависит от ловкости
-            ability = self.dexterity
+            ability = self._dexterity
         elif attribute in (MagicType.force.value, MagicType.dark.value):
             # мастерство магии силы и тьмы зависит от мудрости
-            ability = self.wisdom
+            ability = self._wisdom
         elif attribute in (MagicType.fire.value, MagicType.ice.value):
             # мастерство магии огня и льда зависит от интеллекта
-            ability = self.intelligence
+            ability = self._intelligence
         elif attribute in (MagicType.psychic.value, MagicType.radiant.value):
             # мастерство магии иллюзий и света зависит от харизмы
-            ability = self.charisma
+            ability = self._charisma
         else:
             # все остальное по умолнчанию - выносливости
-            ability = self.constitution
+            ability = self._constitution
 
         return self._ability_coefficient(value=ability)
 
@@ -128,7 +128,7 @@ class Ability(BaseAbility):
         Returns:
             int: бонус характеристики
         """
-        return (value - self.base_characteristic) // 2
+        return (value - self._base_characteristic) // 2
 
 
 class Unit(BaseUnit):
@@ -137,7 +137,9 @@ class Unit(BaseUnit):
     def __init__(
         self,
         name: str,
-        character: "Character",
+        title: str,
+        description: str,
+        characteristic: "Characteristic",
         perks: "PerkCollection",
         level: int = 1,
     ):
@@ -145,13 +147,15 @@ class Unit(BaseUnit):
 
         Args:
             name: имя персонажа
-            character: базовые характиристики персонажа
+            characteristic: базовые характиристики персонажа
             perks: список способностей персонажа
             level: уровень персонажа
         """
         super().__init__(
             name=name,
-            ability=Ability(character=character),
+            title=title,
+            description=description,
+            ability=Ability(characteristic=characteristic),
             perks=perks,
             level=level,
         )
@@ -166,7 +170,7 @@ class Unit(BaseUnit):
         Returns:
             int: значение
         """
-        return self.ability.base_hit_chance + self.level
+        return self._ability.base_hit_chance + self._level
 
     @property
     def defense(self) -> int:
@@ -178,7 +182,7 @@ class Unit(BaseUnit):
         Returns:
             int: значение
         """
-        return self.ability.base_defence + self.armor
+        return self._ability.base_defence + self._armor
 
     @property
     def crit_chance(self) -> int:
@@ -190,7 +194,7 @@ class Unit(BaseUnit):
         Returns:
             int: значение
         """
-        return self.ability.base_crit_chance + self.level
+        return self._ability.base_crit_chance + self._level
 
     @property
     def crit_resistance(self) -> int:
@@ -202,7 +206,7 @@ class Unit(BaseUnit):
         Returns:
             int: значение
         """
-        return self.ability.base_crit_resistance + self.level
+        return self._ability.base_crit_resistance + self._level
 
     @property
     def magic_resistance(self) -> int:
@@ -214,7 +218,7 @@ class Unit(BaseUnit):
         Returns:
             int: значение
         """
-        return self.ability.base_magic_resistance + self.level
+        return self._ability.base_magic_resistance + self._level
 
     @property
     def hit_points(self) -> int:
@@ -227,29 +231,51 @@ class Unit(BaseUnit):
             int: значение
         """
         return (
-            self.ability.base_hit_points +
-            self.ability.base_hp_coefficient * (self.level + self.ability.mastery())
+            self._ability.base_hit_points +
+            self._ability.base_hp_coefficient * (self._level + self._ability.mastery())
         )
 
     def level_up(self) -> None:
         """Повысить уровень персонажа (на 1 пункт)"""
-        self.level += 1
-        self.current_hp = 0 + self.hit_points
+        self._level += 1
+        self._current_hp = 0 + self.hit_points
 
-    def defend(self, damage: int = 0) -> None:
+    def defend_self(self, damage: int = 0) -> None:
         """Действие - защищаться (получить урон от другого персонажа)
 
         Args:
             damage: урон
         """
-        hit_points = self.current_hp - damage
+        hit_points = self._current_hp - damage
         if hit_points <= 0:
-            self.current_hp = 0
+            self._current_hp = 0
         else:
-            self.current_hp = hit_points
+            self._current_hp = hit_points
+
+    def shield_self(self, value: int = 0) -> None:
+        """Действие - укрыться щитом
+
+        Args:
+            value: значение брони
+        """
+        self._armor += value
+
+    def heal_self(self, value: int = 0) -> None:
+        """Действие - исцелиться
+
+        Args:
+            value: значение
+        """
+        hit_points = self._current_hp + value
+        if hit_points > self.hit_points:
+            self._current_hp = 0 + self.hit_points
+        else:
+            self._current_hp = hit_points
 
     def end_circle(self) -> None:
         """Завершить ход
-        Снимаются все временные бафы и броня
+        Снимаются все временные бафы и броня, перезаряжаются способности
         """
-        self.armor = 0
+        self._armor = 0
+        for perk in self._perks.values():
+            perk.change_status(value=PerkStatus.active.value)

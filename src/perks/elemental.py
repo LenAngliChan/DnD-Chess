@@ -1,6 +1,14 @@
 from typing import TYPE_CHECKING
 
 from src.models.perk import Elemental
+from src.utils.textures import (
+    D_S_SPELL_TEXTURE,
+    F_B_SPELL_TEXTURE,
+    F_T_SPELL_TEXTURE,
+    I_S_SPELL_TEXTURE,
+    S_B_SPELL_TEXTURE,
+    M_M_SPELL_TEXTURE,
+)
 from src.items.spells import (
     DivineSmite,
     FireBall,
@@ -20,9 +28,10 @@ class UseDivineSmite(Elemental):
     def __init__(self, person: "BaseUnit"):
         super().__init__(
             name="UseDivineSmite",
+            title="Заклинание",
             spell=DivineSmite(),
             person=person,
-            texture_path='src/sprites/perks/slice-orange-3.png',
+            texture=D_S_SPELL_TEXTURE,
         )
 
 
@@ -32,9 +41,10 @@ class UseFireBall(Elemental):
     def __init__(self, person: "BaseUnit"):
         super().__init__(
             name="UseFireBall",
+            title="Заклинание",
             spell=FireBall(),
             person=person,
-            texture_path='src/sprites/perks/fireball-red-2.png',
+            texture=F_B_SPELL_TEXTURE,
         )
 
 
@@ -44,9 +54,10 @@ class UseFaerieTale(Elemental):
     def __init__(self, person: "BaseUnit"):
         super().__init__(
             name="UseFaerieTale",
+            title="Заклинание",
             spell=FaerieTale(),
             person=person,
-            texture_path='src/sprites/perks/horror-eerie-3.png',
+            texture=F_T_SPELL_TEXTURE,
         )
 
 
@@ -56,9 +67,10 @@ class UseIceStorm(Elemental):
     def __init__(self, person: "BaseUnit"):
         super().__init__(
             name="UseIceStorm",
+            title="Заклинание",
             spell=IceStorm(),
             person=person,
-            texture_path='src/sprites/perks/ice-blue-3.png',
+            texture=I_S_SPELL_TEXTURE,
         )
 
 
@@ -68,9 +80,10 @@ class UseShadowBlade(Elemental):
     def __init__(self, person: "BaseUnit"):
         super().__init__(
             name="UseShadowBlade",
+            title="Заклинание",
             spell=ShadowBlade(),
             person=person,
-            texture_path='src/sprites/perks/enchant-magenta-3.png',
+            texture=S_B_SPELL_TEXTURE,
         )
 
 
@@ -80,7 +93,8 @@ class UseMagicMissile(Elemental):
     def __init__(self, person: "BaseUnit"):
         super().__init__(
             name="UseMagicMissile",
+            title="Заклинание",
             spell=MagicMissile(),
             person=person,
-            texture_path='src/sprites/perks/fire-arrows-magenta-3.png',
+            texture=M_M_SPELL_TEXTURE,
         )

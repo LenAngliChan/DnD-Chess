@@ -3,11 +3,20 @@ from arcade import color
 
 from src.abstractions.board import BaseBoard
 from src.models.collection import FigureCollection, CellCollection, BuildingCollection
-from src.models.domain import Domain
 from src.models.cell import Cell
 from src.board.figures import get_figures_position
 from src.board.buildings import get_buildings_position
+from src.board.domains import RedDomain, BlueDomain, GrayDomain
 from src.utils.enums import Time
+from src.utils.tools import info_context, Index
+from src.utils.messages import (
+    CELL_SELECT_MSG,
+    FIGURE_SELECT_MSG,
+    NO_CELL_MSG,
+    WRONG_DOMAIN_MSG,
+    NO_FIGURE_MSG,
+    WRONG_RADIUS_MSG,
+)
 
 if TYPE_CHECKING:
     from src.abstractions.cell import BaseCell
@@ -21,21 +30,14 @@ class Board(BaseBoard):
     def __init__(self):
         """Инициализация доски"""
 
-        blue_domain = Domain(
-            name="Blue",
-            texture_path=":resources:images/tiles/water.png",
-            domain_color=color.BLUE,
+        blue_domain = BlueDomain(
+            title=Time.night.value,
         )
-        red_domain = Domain(
-            name="Red",
-            texture_path=":resources:images/tiles/lava.png",
-            domain_color=color.RED,
+        red_domain = RedDomain(
+            title=Time.day.value,
         )
-        grey_domain = Domain(
-            name="Gray",
-            texture_path=":resources:images/tiles/brickGrey.png",
-            domain_color=color.GRAY,
-            power=0,
+        grey_domain = GrayDomain(
+            title=Time.dragon.value,
         )
         time = Time.day.value
         cells = CellCollection()
@@ -62,22 +64,22 @@ class Board(BaseBoard):
                 else:
                     domain = self._grey_domain
 
-                index = (column, row)
+                index = Index(column=column, row=row)
                 new_cell = Cell(
                     index=index,
                     domain=domain,
                 )
-                self._cells[new_cell.index] = new_cell
+                self._cells[new_cell.index.name] = new_cell
 
     def initialize_figures(self):
         """Создать фигуры"""
         figures_position = get_figures_position()
         for cell in self._cells.values():
-            figure_fabric = figures_position.get(cell.index)
+            figure_fabric = figures_position.get(cell.index.name)
             if figure_fabric:
                 new_figure = figure_fabric(
-                    domain=cell.domain,
                     index=cell.index,
+                    domain=cell.domain,
                 )
                 cell.figure = new_figure
                 self._figures[new_figure.name] = new_figure
@@ -86,14 +88,14 @@ class Board(BaseBoard):
         """Создать здания"""
         for cell in self._cells.values():
             buildings_position = get_buildings_position()
-            building_fabric = buildings_position.get(cell.index)
+            building_fabric = buildings_position.get(cell.index.name)
             if building_fabric:
                 new_building = building_fabric(
                     index=cell.index,
                     domain=cell.domain,
                 )
                 cell.building = new_building
-                self._buildings[new_building.index] = new_building
+                self._buildings[new_building.index.name] = new_building
 
     def fill_domains(self):
         """Заполнить домены объектами"""
@@ -114,21 +116,31 @@ class Board(BaseBoard):
 
     def select_cell(
         self,
-        cell: "BaseCell",
-    ) -> None:
+        index: Index,
+    ) -> bool:
         """Выбрать клетку
 
         Args:
-            cell: клетка
+            index: индекс клетки
+
+        Returns:
+            bool: успешно выбрана
         """
-        self._current_cell = cell
-        try:
-            # действие по умолчанию - движение
-            actions = self.get_figure_action_list()
-            if actions:
-                self._current_action = actions["Move_Action"]
-        finally:
-            pass
+        cell = self._cells.get(index.name)
+        if cell:
+            self._current_cell = cell
+            info_context.set(value=CELL_SELECT_MSG.format(cell=cell))
+            if cell.figure:
+                info_context.update(value=FIGURE_SELECT_MSG.format(figure=cell.figure))
+                if cell.domain.turn:
+                    # действие по умолчанию - движение
+                    actions = self.get_figure_action_list()
+                    if actions:
+                        self._current_action = actions["Move_Action"]
+
+                    return True
+
+        return False
 
     def select_action(
         self,
@@ -143,14 +155,33 @@ class Board(BaseBoard):
 
     def select_target(
         self,
-        target: "BaseCell",
-    ) -> None:
+        index: Index,
+    ) -> bool:
         """Выбрать цель действия
 
         Args:
-            target: цель действия
+            index: индекс цели
+
+        Returns:
+            bool: успешно выбрана
         """
-        self._start_action(target=target)
+        if not self._current_cell:
+            info_context.set(value=NO_CELL_MSG)
+        elif not self._current_cell.domain.turn:
+            info_context.set(value=WRONG_DOMAIN_MSG.format(domain=self._time))
+        elif not self._current_action:
+            info_context.set(value=NO_FIGURE_MSG)
+        else:
+            if index.name in self.get_cell_neighbors(
+                radius=1,    # в будущем будет радиус атаки
+            ):
+                cell = self._cells.get(index.name)
+                self._start_action(target=cell)
+                return True
+            else:
+                info_context.set(value=WRONG_RADIUS_MSG)
+
+        return False
 
     def get_figure_action_list(self) -> Optional["UserDict[str, BaseAction]"]:
         """Получить список действий фигуры
@@ -159,30 +190,32 @@ class Board(BaseBoard):
             dict: список действий
         """
         if self._current_cell.figure:
-            return self._current_cell.figure.get_action_list()
+            return self._current_cell.figure.get_actions()
 
-    def get_cell_neighbors(self, value: int = 1) -> Iterable["BaseCell"]:
-        """Получить список допустимых клеток в качестве цели (соседей)
+    def get_cell_neighbors(self, radius: int = 1) -> Iterable[str]:
+        """Получить список индексов допустимых клеток в качестве цели (соседей)
 
         Returns:
-            iterable: список соседних клеток
+            iterable: список индексов соседних клеток
         """
-        cell_neighbors = []
 
         if self._current_cell:
-            indexes = [
-                (self._current_cell.index[0] + i, self._current_cell.index[1] + j)
-                for i, j in [(-value, 0), (value, 0), (0, -value), (0, value)]
+            cell_neighbors = [
+                Index(
+                    column=self._current_cell.index.column + i,
+                    row=self._current_cell.index.row + j,
+                ).name
+                for i, j in [(-radius, 0), (radius, 0), (0, -radius), (0, radius)]
             ]
-
-            for index in indexes:
-                if index in self._cells:
-                    cell_neighbors.append(self._cells.get(index))
+            cell_neighbors.append(self._current_cell.index.name)
+        else:
+            cell_neighbors = []
 
         return cell_neighbors
 
     def start_circle(self):
         """Начать цикл битвы"""
+        self._started = True
         self._time = Time.day.value
         self._red_domain.end_circle()
 
@@ -190,9 +223,11 @@ class Board(BaseBoard):
         """Завершить один цикл битвы"""
         if self._time == Time.day.value:
             self._time = Time.night.value
+            self._red_domain.end_turn()
             self._blue_domain.end_circle()
         else:
             self._time = Time.day.value
+            self._blue_domain.end_turn()
             self._red_domain.end_circle()
 
     def _start_action(self, target: "BaseCell"):

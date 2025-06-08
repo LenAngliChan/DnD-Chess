@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from src.abstractions.sprite import BaseImage
     from src.abstractions.cell import BaseCell
     from src.abstractions.figure import BaseFigure
-    from src.abstractions.tools import BaseAttribute
+    from src.utils.tools import BaseAttribute, Index
     from src.abstractions.action import BaseAction
     from collections import UserDict
 
@@ -20,9 +20,10 @@ class BaseBoard(ABC):
         red_domain: "BaseDomain",
         grey_domain: "BaseDomain",
         time: "BaseAttribute",
-        cells: "UserDict[tuple[int, int], BaseCell]" = None,
+        started: bool = False,
+        cells: "UserDict[str, BaseCell]" = None,
         figures: "UserDict[str, BaseFigure]" = None,
-        buildings: "UserDict[tuple[int, int], BaseImage]" = None,
+        buildings: "UserDict[str, BaseImage]" = None,
     ):
         """Инициализация доски
 
@@ -38,12 +39,17 @@ class BaseBoard(ABC):
         self._blue_domain = blue_domain
         self._red_domain = red_domain
         self._grey_domain = grey_domain
+        self._started = started
         self._time = time
         self._cells = cells
         self._figures = figures
         self._buildings = buildings
         self._current_cell: Optional["BaseCell"] = None
         self._current_action: Optional["BaseAction"] = None
+
+    @property
+    def started(self) -> bool:
+        return self._started
 
     @property
     def current_cell(self) -> Optional["BaseCell"]:
@@ -53,7 +59,11 @@ class BaseBoard(ABC):
     def current_action(self) -> Optional["BaseAction"]:
         return self._current_action
 
-    def get_cells(self) -> "UserDict[tuple[int, int], BaseCell]":
+    @property
+    def time(self) -> "BaseAttribute":
+        return self._time
+
+    def get_cells(self) -> "UserDict[str, BaseCell]":
         """Получить список клеток доски
 
         Returns:
@@ -84,12 +94,15 @@ class BaseBoard(ABC):
     @abstractmethod
     def select_cell(
         self,
-        cell: "BaseCell",
-    ) -> None:
+        index: "Index",
+    ) -> bool:
         """Выбрать клетку
 
         Args:
-            cell: клетка
+            index: индекс клетки
+
+        Returns:
+            bool: успешно выбрана
         """
         pass
 
@@ -108,12 +121,15 @@ class BaseBoard(ABC):
     @abstractmethod
     def select_target(
         self,
-        target: "BaseCell",
-    ) -> None:
+        index: "Index",
+    ) -> bool:
         """Выбрать цель действия
 
         Args:
-            target: цель действия
+            index: индекс цели
+
+        Returns:
+            bool: успешно выбрана
         """
         pass
 
@@ -127,11 +143,11 @@ class BaseBoard(ABC):
         pass
 
     @abstractmethod
-    def get_cell_neighbors(self, value: int = 1) -> Iterable["BaseCell"]:
-        """Получить список допустимых клеток в качестве цели (соседей)
+    def get_cell_neighbors(self, radius: int = 1) -> Iterable[str]:
+        """Получить список индексов допустимых клеток в качестве цели (соседей)
 
         Returns:
-            iterable: список соседних клеток
+            iterable: список индексов соседних клеток
         """
         pass
 

@@ -1,17 +1,11 @@
-from abc import ABC
-from arcade import Sprite
-from arcade.types import PathOrTexture
 from typing import TYPE_CHECKING
 from arcade.gui import (
-    UIImage,
     UITextureButton,
 )
 
-from src.utils.constants import CELL_SIZE
-
 if TYPE_CHECKING:
     from arcade import Texture
-    from src.abstractions.tools import SpriteCore
+    from utils.tools import SpriteCore
 
 
 class BaseButton(UITextureButton):

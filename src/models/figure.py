@@ -1,14 +1,16 @@
 from typing import TYPE_CHECKING
 
 from src.abstractions.figure import BaseFigure, BaseFigureSprite
-from src.abstractions.tools import SpriteCore
+from utils.tools import SpriteCore
 from src.utils.enums import FigureStatus, ActionType
-from src.models.action import Action
+from src.models.action import Action, MoveAction, PassAction
 from src.models.collection import ActionCollection
 from src.models.indicator import IndicatorBar
 from src.utils.constants import CELL_SIZE
 
 if TYPE_CHECKING:
+    from arcade import Texture
+    from src.utils.tools import Index
     from src.abstractions.item import BaseAttribute
     from src.abstractions.unit import BaseUnit
     from src.abstractions.action import BaseAction
@@ -29,8 +31,8 @@ class FigureSprite(BaseFigureSprite):
             core: свойства графического объекта
 
         """
-        core.width = CELL_SIZE // 2
-        core.height = CELL_SIZE // 2
+        core.width = CELL_SIZE // 1.3
+        core.height = CELL_SIZE // 1.3
         super().__init__(
             core=core,
         )
@@ -41,25 +43,25 @@ class Figure(BaseFigure):
 
     def __init__(
         self,
-        index: tuple[int, int],
+        index: "Index",
         domain: "BaseDomain",
-        texture_path: str = None,
+        texture: "Texture" = None,
         unit: "BaseUnit" = None,
         status: "BaseAttribute" = FigureStatus.alive.value,
     ):
         """Инициализация графики фигуры
 
             Args:
-                index: свойства графического объекта
-                domain:
-                texture_path:
-                unit:
-                status:
+                index: индекс
+                domain: домен
+                texture: текстуры
+                unit: персонаж
+                status: статус
         """
         core = SpriteCore(
             name=domain.name + "_" + unit.name,
             index=index,
-            texture_path=texture_path,
+            texture=texture,
             domain=domain,
         )
         sprite = FigureSprite(
@@ -68,7 +70,7 @@ class Figure(BaseFigure):
         actions = self.__initialize_actions(unit=unit)
         health_bar = IndicatorBar(
             width=sprite.core.width,
-            height=sprite.core.height // 8,
+            height=sprite.core.height // 10,
         )
         super().__init__(
             sprite=sprite,
@@ -78,25 +80,25 @@ class Figure(BaseFigure):
             status=status,
         )
 
-    def get_action_list(self) -> "UserDict[str, BaseAction]":
+    def get_actions(self) -> "UserDict[str, BaseAction]":
         """Получить список действий фигуры
 
         Returns:
             iterable: список действий
         """
 
-        return self.actions
+        return self._actions
 
     def check_status(self):
         """Проверить статус фигуры"""
-        self.indicator.value = self.unit.current_hp / self.unit.hit_points
-        if self.unit.current_hp == 0:
+        self.indicator.value = self._unit.hp_percent
+        if self._unit.is_dead:
             self.status = FigureStatus.captive.value
 
     def end_circle(self) -> None:
         """Завершить ход"""
-        self.unit.end_circle()
-        self.can_move = True
+        self._unit.end_circle()
+        self._can_move = True
 
     def kill_self(self) -> None:
         """Уничтожить себя"""
@@ -106,20 +108,10 @@ class Figure(BaseFigure):
         """Создать список возможных действий фигуры"""
 
         # действие - двигаться
-        move_action = Action(
-            name="Move_Action",
-            figure=self,
-            attribute=ActionType.move.value,
-            texture_path='src/sprites/perks/blazing-feet.png',
-        )
+        move_action = MoveAction(figure=self)
 
         # действие - пропустить ход
-        pass_action = Action(
-            name="Pass_Action",
-            figure=self,
-            attribute=ActionType.defend.value,
-            texture_path='src/sprites/perks/armor-0.png',
-        )
+        pass_action = PassAction(figure=self)
 
         # список действий  - использовать способности
         use_actions = []
@@ -129,10 +121,11 @@ class Figure(BaseFigure):
                     Action(
                         name=perk.name + "_" + "Action",
                         figure=self,
+                        texture=perk.texture,
                         attribute=ActionType.use.value,
                         perk=perk,
                     )
-                    for perk in unit.perks.values()
+                    for perk in unit.get_perks().values()
                 ]
             )
 

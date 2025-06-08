@@ -2,6 +2,16 @@ from typing import TYPE_CHECKING
 
 from src.models.perk import Melee
 from src.utils.enums import PerkType
+from src.utils.textures import (
+    DAGGER_TEXTURE,
+    TWO_DAGGERS_TEXTURE,
+    SWORD_OH_TEXTURE,
+    SWORD_BASTARD_TEXTURE,
+    SWORD_TH_TEXTURE,
+    AXE_TEXTURE,
+    BOW_TEXTURE,
+    FISTS_TEXTURE,
+)
 from src.items.weapons import (
     Dagger,
     TwoDaggers,
@@ -14,6 +24,7 @@ from src.items.weapons import (
 )
 
 if TYPE_CHECKING:
+    from arcade import Texture
     from src.abstractions.unit import BaseUnit
 
 
@@ -23,9 +34,10 @@ class AttackWithDagger(Melee):
     def __init__(self, person: "BaseUnit"):
         super().__init__(
             name="AttackWithDagger",
+            title="Взмах",
             weapon=Dagger(),
             person=person,
-            texture_path='src/sprites/perks/w_dagger_steel.png',
+            texture=DAGGER_TEXTURE,
         )
 
 
@@ -35,9 +47,10 @@ class AttackWithTwoDaggers(Melee):
     def __init__(self, person: "BaseUnit"):
         super().__init__(
             name="AttackWithTwoDaggers",
+            title="Двойной Укол",
             weapon=TwoDaggers(),
             person=person,
-            texture_path='src/sprites/perks/w_dagger_gold.png',
+            texture=TWO_DAGGERS_TEXTURE,
         )
 
 
@@ -47,9 +60,10 @@ class AttackWithSwordOH(Melee):
     def __init__(self, person: "BaseUnit"):
         super().__init__(
             name="AttackWithSwordOH",
+            title="Удар",
             weapon=SwordOH(),
             person=person,
-            texture_path='src/sprites/perks/w_shortsword_steel.png',
+            texture=SWORD_OH_TEXTURE,
         )
 
 
@@ -59,13 +73,14 @@ class AttackWithSwordBastard(Melee):
     def __init__(
         self,
         person: "BaseUnit",
-        texture_path: str = 'src/sprites/perks/w_longsword_steel.png',
+        texture: "Texture" = SWORD_BASTARD_TEXTURE,
     ):
         super().__init__(
             name="AttackWithSwordBastard",
+            title="Сильный Удар",
             weapon=SwordBastard(),
             person=person,
-            texture_path=texture_path,
+            texture=texture,
         )
 
 
@@ -75,9 +90,10 @@ class AttackWithSwordTH(Melee):
     def __init__(self, person: "BaseUnit"):
         super().__init__(
             name="AttackWithSwordTH",
+            title="Сильный Удар",
             weapon=SwordTH(),
             person=person,
-            texture_path='src/sprites/perks/w_broadsword_steel.png',
+            texture=SWORD_TH_TEXTURE,
         )
 
 
@@ -87,9 +103,10 @@ class AttackWithAxe(Melee):
     def __init__(self, person: "BaseUnit"):
         super().__init__(
             name="AttackWithAxe",
+            title="Сильный Удар",
             weapon=Axe(),
             person=person,
-            texture_path='src/sprites/perks/w_axe_war_steel.png',
+            texture=AXE_TEXTURE,
         )
 
 
@@ -101,10 +118,11 @@ class AttackWithBow(Melee):
     def __init__(self, person: "BaseUnit"):
         super().__init__(
             name="AttackWithBow",
+            title="Выстрел",
             weapon=Bow(),
             person=person,
             attribute=PerkType.ranged.value,
-            texture_path='src/sprites/perks/archer.png',
+            texture=BOW_TEXTURE,
         )
 
 
@@ -114,7 +132,8 @@ class AttackWithFists(Melee):
     def __init__(self, person: "BaseUnit"):
         super().__init__(
             name="AttackWithFists",
+            title="Техника Пьяного Мастера",
             weapon=Fists(),
             person=person,
-            texture_path='src/sprites/perks/wind-grasp-air-1.png',
+            texture=FISTS_TEXTURE,
         )

@@ -1,38 +1,54 @@
 from typing import TYPE_CHECKING
 
+from src.utils.tools import info_context
 from src.abstractions.action import BaseAction
 from src.utils.enums import ActionType, PerkType, FigureStatus, ActionKWArgs
+from src.utils.messages import (
+    ACTION_DEFEND_MSG,
+    ACTION_NO_TARGET_MSG,
+    ACTION_WRONG_MOVE_MSG,
+    ACTION_WRONG_USE_MSG,
+    ACTION_NO_FIGURE_MSG,
+    ACTION_CANNOT_MOVE_MSG,
+    ACTION_USE_MSG,
+    ACTION_MOVE_MSG,
+)
+from src.utils.textures import MOVE_ACTION_TEXTURE, PASS_ACTION_TEXTURE
 
 if TYPE_CHECKING:
+    from arcade import Texture
     from src.abstractions.perk import BasePerk
-    from src.abstractions.tools import BaseAttribute
+    from utils.tools import BaseAttribute
     from src.abstractions.figure import BaseFigure
     from src.abstractions.cell import BaseCell
 
 
 class Action(BaseAction):
+    """Модель действия"""
 
     def __init__(
         self,
         name: str,
         figure: "BaseFigure",
+        texture: "Texture",
         attribute: "BaseAttribute" = ActionType.move.value,
         perk: "BasePerk" = None,
-        texture_path: str = None,
     ):
         """Инициализация действия
 
         Args:
             name: имя
+            figure: фигура
             attribute: тип действия
             perk: способность
+            texture: иконка действия
         """
         super().__init__(
             name=name,
             attribute=attribute,
             figure=figure,
             perk=perk,
-            texture_path=texture_path,
+            texture=texture,
         )
 
     def realise(
@@ -46,33 +62,31 @@ class Action(BaseAction):
             current_cell: исходная клетка
             target: цель действия (графический объект)
         """
-        # Пока нет ходов, закоментировал - для тестов
-        # if not self.figure.can_move:
-        #     print("Персонаж не может двигаться!")
-        #     return
 
         if self.attribute == ActionType.defend.value:
             self.figure.can_move = False
-            print("Пропуск хода!")
+            info_context.update(
+                value=ACTION_DEFEND_MSG.format(figure=self.figure.title)
+            )
             return
         else:
             if not target:
-                print("Не выбрана цель!")
+                info_context.reset(value=ACTION_NO_TARGET_MSG)
                 return
             if target.figure:
                 if self.attribute == ActionType.move.value:
-                    print("Невозможно переместиться на клетку с другой фигурой!")
+                    info_context.reset(value=ACTION_WRONG_MOVE_MSG)
                     return
                 else:
                     if (
                         self.figure == target.figure
                         and self.perk.attribute in (PerkType.melee.value, PerkType.elemental.value)
                     ):
-                        print("Нельзя атаковать самого себя оружием или магией!")
+                        info_context.reset(value=ACTION_WRONG_USE_MSG)
                         return
             else:
                 if self.attribute == ActionType.use.value:
-                    print("Чтобы использовать способность нужна цель!")
+                    info_context.reset(value=ACTION_NO_FIGURE_MSG)
                     return
             self._create_action(
                 current_cell=current_cell,
@@ -102,7 +116,6 @@ class Action(BaseAction):
                 current_cell=current_cell,
                 target=target,
             )
-        self.figure.can_move = False
 
     def __use_perk(
         self,
@@ -115,9 +128,16 @@ class Action(BaseAction):
             current_cell: исходная клетка
             target: цель действия (клетка)
         """
+        info_context.set(
+            value=ACTION_USE_MSG.format(
+                figure=self.figure.title,
+                action=self.perk.title,
+                target=target.figure.title,
+            )
+        )
 
         # Расчет бонусов от домена и здания
-        domain_bonus = self.figure.domain.power - target.figure.domain.power
+        domain_bonus = (self.figure.domain.power - target.figure.domain.power) // 2
         building_bonus = target.building.defence if target.building else 0
         action_kwargs = {
             ActionKWArgs.domain_bonus.value: domain_bonus,
@@ -160,8 +180,19 @@ class Action(BaseAction):
             current_cell: исходная клетка
             target: цель действия (клетка)
         """
+        info_context.update(
+            value=ACTION_MOVE_MSG.format(
+                figure=self.figure.title,
+                cell=target.title,
+            )
+        )
+
+        if not self.figure.can_move:
+            info_context.set(value=ACTION_CANNOT_MOVE_MSG)
+            return
         current_cell.remove_figure()
         target.capture(figure=self.figure)
+        self.figure.can_move = False
 
     def __create_convergence(
         self,
@@ -192,3 +223,30 @@ class Action(BaseAction):
         # если цель на той же оси Y
         else:
             new_coord_y = self.figure.center_y
+
+
+class MoveAction(Action):
+    """Модель действия - движение"""
+    def __init__(
+        self,
+        figure: "BaseFigure",
+    ):
+        super().__init__(
+            name="Move_Action",
+            figure=figure,
+            texture=MOVE_ACTION_TEXTURE,
+        )
+
+
+class PassAction(Action):
+    """Модель действия - пропустить ход"""
+    def __init__(
+        self,
+        figure: "BaseFigure",
+    ):
+        super().__init__(
+            name="Pass_Action",
+            figure=figure,
+            attribute=ActionType.defend.value,
+            texture=PASS_ACTION_TEXTURE,
+        )

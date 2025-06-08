@@ -14,7 +14,7 @@ from src.utils.constants import (
 )
 
 if TYPE_CHECKING:
-    from src.abstractions.tools import F_spec
+    from utils.tools import F_spec
     from arcade.types import Color
 
 TEX_SCROLL_DOWN = load_texture(":resources:gui_basic_assets/scroll/indicator_down.png")

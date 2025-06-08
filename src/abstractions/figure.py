@@ -4,9 +4,10 @@ from arcade.gui.widgets.layout import UIAnchorLayout
 
 from src.abstractions.sprite import BaseImage
 from src.utils.constants import CELL_SIZE
+from src.utils.descriptions import FIGURE_LONG_DESC
 
 if TYPE_CHECKING:
-    from src.abstractions.tools import SpriteCore
+    from src.utils.tools import SpriteCore, Index
     from src.abstractions.domain import BaseDomain
     from src.abstractions.item import BaseAttribute
     from src.abstractions.unit import BaseUnit
@@ -66,6 +67,7 @@ class BaseFigure(UIAnchorLayout):
                 sprite.height / CELL_SIZE,
             )
         )
+        self._title = sprite.core.domain.title + " " + unit.title
         self._sprite = self.add(
             child=sprite,
         )
@@ -79,36 +81,53 @@ class BaseFigure(UIAnchorLayout):
         self._actions = actions
         self._can_move = True
 
+    def __str__(self) -> str:
+        """Полное описание фигуры"""
+        return FIGURE_LONG_DESC.format(title=self._title, unit=self._unit)
+
+    @property
+    def desc(self) -> str:
+        """Краткое описание фигуры"""
+        return self._title
+
+    @property
+    def title(self) -> str:
+        """Наименование"""
+        return self._title
+
     @property
     def sprite(self) -> BaseFigureSprite:
+        """Графика фигуры"""
         return self._sprite
 
     @property
     def indicator(self) -> "BaseIndicatorBar":
+        """Индикатор здоровья фигуры"""
         return self._indicator
 
     @property
     def unit(self) -> "BaseUnit":
+        """Персонаж"""
         return self._unit
 
     @property
     def status(self) -> "BaseAttribute":
+        """Статус фигуры"""
         return self._status
 
     @status.setter
     def status(self, value: "BaseAttribute") -> None:
+        """Установить статус фигуры"""
         self._status = value
 
     @property
-    def actions(self) -> "UserDict[str, BaseAction]":
-        return self._actions
-
-    @property
     def can_move(self) -> bool:
+        """Возможность перемещаться"""
         return self._can_move
 
     @can_move.setter
     def can_move(self, value: bool) -> None:
+        """Изменить возможность перемещаться"""
         self._can_move = value
 
     @property
@@ -122,7 +141,7 @@ class BaseFigure(UIAnchorLayout):
         return self._sprite.core.name
 
     @property
-    def index(self) -> tuple[int, int]:
+    def index(self) -> "Index":
         """Напрямую извлечь индекс спрайта"""
         return self._sprite.core.index
 
@@ -146,7 +165,7 @@ class BaseFigure(UIAnchorLayout):
         pass
 
     @abstractmethod
-    def get_action_list(self) -> "UserDict[str, BaseAction]":
+    def get_actions(self) -> "UserDict[str, BaseAction]":
         """Получить список действий фигуры
 
         Returns:

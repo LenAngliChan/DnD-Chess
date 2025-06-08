@@ -4,7 +4,13 @@ from src.models.perk import Elemental, Armor, PerkCombination
 from src.perks.melee import AttackWithSwordBastard
 from src.perks.elemental import UseDivineSmite
 from src.utils.enums import PerkType, ArmorType
-
+from src.utils.textures import (
+    HEALING_HAND_TEXTURE,
+    LIGHT_SHIELD_TEXTURE,
+    MEDIUM_SHIELD_TEXTURE,
+    GREAT_SHIELD_TEXTURE,
+    DS_SWORD_TEXTURE,
+)
 from src.items.spells import (
     HealingHand,
 )
@@ -20,10 +26,11 @@ class UseHealingHand(Elemental):
     def __init__(self, person: "BaseUnit"):
         super().__init__(
             name="UseHealingHand",
+            title="Исцеляющее Касание",
             spell=HealingHand(),
             person=person,
             attribute=PerkType.heal.value,
-            texture_path='src/sprites/perks/heal-jade-3.png',
+            texture=HEALING_HAND_TEXTURE,
         )
 
 
@@ -36,17 +43,18 @@ class UseDefendStand(Armor):
         shield: "BaseItem"
     ):
         if shield.attribute == ArmorType.light_shield.value:
-            texture_path = 'src/sprites/perks/protect-sky-1.png'
+            texture = LIGHT_SHIELD_TEXTURE
         elif shield.attribute == ArmorType.medium_shield.value:
-            texture_path = 'src/sprites/perks/protect-sky-2.png'
+            texture = MEDIUM_SHIELD_TEXTURE
         else:
-            texture_path = 'src/sprites/perks/protect-sky-3.png'
+            texture = GREAT_SHIELD_TEXTURE
         super().__init__(
             name="UseDefendStand",
+            title="Защитная Стойка",
             shield=shield,
             person=person,
             attribute=PerkType.shield.value,
-            texture_path=texture_path,
+            texture=texture,
         )
 
 
@@ -58,7 +66,7 @@ class AttackWithSwordBySpell(PerkCombination):
             name="AttackWithSwordBySpell",
             main_perk=AttackWithSwordBastard(
                 person=person,
-                texture_path='src/sprites/perks/w_longsword_gold.png',
+                texture=DS_SWORD_TEXTURE,
             ),
             effects=[UseDivineSmite(person=person)],
         )

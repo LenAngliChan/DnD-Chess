@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
-from arcade import load_texture
+from src.utils.descriptions import ACTION_SHORT_DESC
 
 if TYPE_CHECKING:
     from arcade import Texture
     from src.abstractions.perk import BasePerk
-    from src.abstractions.tools import BaseAttribute
+    from utils.tools import BaseAttribute
     from src.abstractions.figure import BaseFigure
     from src.abstractions.cell import BaseCell
 
@@ -18,9 +18,9 @@ class BaseAction(ABC):
         self,
         name: str,
         attribute: "BaseAttribute",
+        texture: "Texture",
         figure: "BaseFigure",
         perk: "BasePerk" = None,
-        texture_path: str = None,
     ):
         """Инициализация действия
 
@@ -34,9 +34,19 @@ class BaseAction(ABC):
         self._attribute = attribute
         self._figure = figure
         self._perk = perk
-        self._texture = self._create_texture(
-            perk=perk,
-            texture_path=texture_path,
+        self._texture = texture
+
+    def __str__(self) -> str:
+        """Полное описание действия"""
+        return self._perk.desc
+
+    @property
+    def desc(self) -> str:
+        """Краткое описание действия"""
+        perk_name = self._perk.title if self._perk else ""
+        return ACTION_SHORT_DESC.format(
+            type=self._attribute,
+            perk=perk_name,
         )
 
     @property
@@ -56,18 +66,8 @@ class BaseAction(ABC):
         return self._perk
 
     @property
-    def texture(self) -> Optional["Texture"]:
+    def texture(self) -> "Texture":
         return self._texture
-
-    @staticmethod
-    def _create_texture(
-        perk: "BasePerk" = None,
-        texture_path: str = None,
-    ) -> Optional["Texture"]:
-        if perk:
-            return perk.texture
-        elif texture_path:
-            return load_texture(file_path=texture_path)
 
     @abstractmethod
     def realise(

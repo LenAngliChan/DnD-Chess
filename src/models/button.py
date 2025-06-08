@@ -1,16 +1,17 @@
-from arcade import load_texture
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from src.abstractions.button import BaseButton
-from src.abstractions.tools import SpriteCore
-from src.utils.constants import (
-    CELL_SIZE,
-    TEXTURE_RED_BUTTON_NORMAL,
-    TEXTURE_RED_BUTTON_HOVER,
-    TEXTURE_RED_BUTTON_PRESS,
+from utils.tools import SpriteCore
+from src.utils.constants import CELL_SIZE
+from src.utils.textures import (
+    RED_BUTTON_NORMAL_TEXTURE,
+    RED_BUTTON_HOVER_TEXTURE,
+    RED_BUTTON_PRESS_TEXTURE,
 )
 
 if TYPE_CHECKING:
+    from src.utils.tools import Index
+    from arcade import Texture
     from src.abstractions.board import BaseBoard
 
 
@@ -19,27 +20,21 @@ class Button(BaseButton):
     def __init__(
         self,
         name: str,
-        index: tuple[int, int],
+        index: "Index",
         text: str,
         board: "BaseBoard",
         width: float = CELL_SIZE,
         height: float = CELL_SIZE // 2,
-        texture_path: str = TEXTURE_RED_BUTTON_NORMAL,
-        texture_hovered_path: str | None = TEXTURE_RED_BUTTON_HOVER,
-        texture_pressed_path: str | None = TEXTURE_RED_BUTTON_PRESS,
+        texture: "Texture" = RED_BUTTON_NORMAL_TEXTURE,
+        texture_hovered: Optional["Texture"] = RED_BUTTON_HOVER_TEXTURE,
+        texture_pressed: Optional["Texture"] = RED_BUTTON_PRESS_TEXTURE,
     ):
         core = SpriteCore(
             name=name,
             index=index,
-            texture_path=texture_path,
+            texture=texture,
             width=width,
             height=height,
-        )
-        texture_hovered = (
-            load_texture(file_path=texture_hovered_path) if texture_hovered_path else None
-        )
-        texture_pressed = (
-            load_texture(file_path=texture_pressed_path) if texture_pressed_path else None
         )
         super().__init__(
             core=core,

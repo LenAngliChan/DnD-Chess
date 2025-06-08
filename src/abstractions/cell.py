@@ -1,12 +1,13 @@
 from abc import abstractmethod
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from arcade import color
 from arcade.gui.widgets.layout import UIAnchorLayout
 
 from src.abstractions.sprite import BaseImage
+from src.utils.descriptions import CELL_SHORT_DESC, CELL_LONG_DESC
 
 if TYPE_CHECKING:
-    from src.abstractions.tools import SpriteCore
+    from src.utils.tools import SpriteCore, Index
     from src.abstractions.domain import BaseDomain
     from src.abstractions.figure import BaseFigure
     from src.abstractions.building import BaseBuilding
@@ -36,11 +37,11 @@ class BaseCellSprite(BaseImage):
             target: домен
         """
         # убрать бонус мощи для текущего домена
-        self.core.domain.power -= 1
+        self._core.domain.power -= 1
         # сменить домен, текстуры и прибавить бонус мощи для нового домена
-        self.core.domain = target
-        self.texture = self.core.domain.texture
-        self.core.domain.power += 1
+        self._core.domain = target
+        self.texture = self._core.domain.texture
+        self._core.domain.power += 1
 
 
 class BaseCell(UIAnchorLayout):
@@ -76,32 +77,54 @@ class BaseCell(UIAnchorLayout):
             )
         self._building = building
         self._figure = figure
+        self._title = "Клетка"
+
+    def __str__(self) -> str:
+        """Полное описание клетки"""
+        has_building = self._building if self._building else "Пусто"
+        return CELL_LONG_DESC.format(title=self.desc, building=has_building)
+
+    @property
+    def desc(self) -> str:
+        """Краткое описание клетки"""
+        return CELL_SHORT_DESC.format(index=self._sprite.core.index)
+
+    @property
+    def title(self) -> str:
+        """Краткое описание клетки"""
+        return self._title
 
     @property
     def sprite(self) -> BaseCellSprite:
+        """Доступ к графике клетки"""
         return self._sprite
 
     @property
-    def building(self) -> "BaseBuilding":
+    def building(self) -> Optional["BaseBuilding"]:
+        """Здание на клетке (при наличии)"""
         return self._building
 
     @building.setter
     def building(self, value: "BaseBuilding") -> None:
+        """Установить здание (допускается только при инициализации доски)"""
         self._building = self.add(
             child=value,
         )
 
     @property
-    def figure(self) -> "BaseFigure":
+    def figure(self) -> Optional["BaseFigure"]:
+        """Фигура на клетке (при наличии)"""
         return self._figure
 
     @figure.setter
     def figure(self, value: "BaseFigure") -> None:
+        """Установить фигуру на клетке"""
         self._figure = self.add(
             child=value,
         )
 
     def remove_figure(self) -> None:
+        """Удалить фигуру с клетки"""
         if self._figure:
             self.remove(
                 child=self._figure,
@@ -113,21 +136,21 @@ class BaseCell(UIAnchorLayout):
     @property
     def domain(self) -> "BaseDomain":
         """Напрямую извлечь домен спрайта"""
-        return self.sprite.core.domain
+        return self._sprite.core.domain
 
     @property
     def name(self) -> str:
         """Напрямую извлечь имя спрайта"""
-        return self.sprite.core.name
+        return self._sprite.core.name
 
     @property
-    def index(self) -> tuple[int, int]:
+    def index(self) -> "Index":
         """Напрямую извлечь индекс спрайта"""
-        return self.sprite.core.index
+        return self._sprite.core.index
 
     @abstractmethod
     def capture(self, figure: "BaseFigure") -> None:
-        """Захватить клетку"""
+        """Захватить клетку фигурой"""
         pass
 
     def change_domain(self, target: "BaseDomain") -> None:
@@ -136,9 +159,9 @@ class BaseCell(UIAnchorLayout):
         Args:
             target: домен
         """
-        if self.building:
-            if self.building.can_change_domain:
-                self.sprite.change_domain(target=target)
-                self.building.change_domain(target=target)
+        if self._building:
+            if self._building.can_change_domain:
+                self._sprite.change_domain(target=target)
+                self._building.change_domain(target=target)
         else:
-            self.sprite.change_domain(target=target)
+            self._sprite.change_domain(target=target)
