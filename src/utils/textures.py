@@ -1,21 +1,56 @@
 from arcade import load_texture, load_spritesheet, LRBT
+from src.sprites import (
+    switch_green,
+    switch_red,
+    red_button,
+    red_button_hovered,
+    red_button_pressed,
+    red_domain,
+    blue_domain,
+    gray_domain,
+)
+from src.sprites.perks import (
+    move_action,
+    pass_action,
+    healing_hand,
+    light_shield,
+    medium_shield,
+    great_shield,
+    ds_sword,
+    dagger,
+    two_daggers,
+    sword_oh,
+    sword_bastard,
+    sword_th,
+    axe,
+    bow,
+    fists,
+    d_s_spell,
+    f_b_spell,
+    f_t_spell,
+    i_s_spell,
+    s_b_spell,
+    m_m_spell,
+)
+from src.sprites.units import units_sheet
+from src.sprites.buildings import altar_path, castle_path, crypt_path
 
 # текстуры кнопок
-SWITCH_GREEN_TEXTURE = load_texture(file_path=":resources:gui_basic_assets/toggle/green.png")
-SWITCH_RED_TEXTURE = load_texture(file_path=":resources:gui_basic_assets/toggle/red.png")
-RED_BUTTON_NORMAL_TEXTURE = load_texture(file_path=":resources:gui_basic_assets/button/red_normal.png")
-RED_BUTTON_HOVER_TEXTURE = load_texture(file_path=":resources:gui_basic_assets/button/red_hover.png")
-RED_BUTTON_PRESS_TEXTURE = load_texture(file_path=":resources:gui_basic_assets/button/red_press.png")
+SWITCH_GREEN_TEXTURE = load_texture(file_path=switch_green)
+SWITCH_RED_TEXTURE = load_texture(file_path=switch_red)
+RED_BUTTON_NORMAL_TEXTURE = load_texture(file_path=red_button)
+RED_BUTTON_HOVER_TEXTURE = load_texture(file_path=red_button_hovered)
+RED_BUTTON_PRESS_TEXTURE = load_texture(file_path=red_button_pressed)
 
 # текстуры зданий
-ALTAR_TEXTURE = load_texture(file_path="src/sprites/buildings/Altar.png")
-CASTLE_TEXTURE = load_texture(file_path="src/sprites/buildings/Castle.png")
-CRYPT_TEXTURE = load_texture(file_path="src/sprites/buildings/Crypt.png")
+ALTAR_TEXTURE = load_texture(file_path=altar_path)
+CASTLE_TEXTURE = load_texture(file_path=castle_path)
+CRYPT_TEXTURE = load_texture(file_path=crypt_path)
 
 # Текстуры доменов
-RED_DOMAIN_TEXTURE = load_texture(file_path=":resources:images/tiles/lava.png")
-BLUE_DOMAIN_TEXTURE = load_texture(file_path=":resources:images/tiles/water.png")
-GRAY_DOMAIN_TEXTURE = load_texture(file_path=":resources:images/tiles/brickGrey.png")
+RED_DOMAIN_TEXTURE = load_texture(file_path=red_domain)
+BLUE_DOMAIN_TEXTURE = load_texture(file_path=blue_domain)
+GRAY_DOMAIN_TEXTURE = load_texture(file_path=gray_domain)
 
 # текстуры фигур
 # BARBARIAN_TEXTURE = load_texture(file_path="src/sprites/units/Barbarian.png")
@@ -31,7 +66,7 @@ GRAY_DOMAIN_TEXTURE = load_texture(file_path=":resources:images/tiles/brickGrey.
 # WARLOCK_TEXTURE = load_texture(file_path="src/sprites/units/Warlock.png")
 # WIZARD_TEXTURE = load_texture(file_path="src/sprites/units/Wizard.png")
 # через один рисунок
-UNIT_SPRITE_SHEET = load_spritesheet("src/sprites/units/dnd_units.png")
+UNIT_SPRITE_SHEET = load_spritesheet(file_name=units_sheet)
 # и позиции текстур на этом рисунке (в пикселях)
 BARBARIAN_MALE_RECT = LRBT(left=10, right=175, bottom=730, top=900)
 BARBARIAN_FEMALE_RECT = LRBT(left=175, right=340, bottom=720, top=900)
@@ -59,26 +94,26 @@ WIZARD_MALE_RECT = LRBT(left=50, right=165, bottom=50, top=170)
 WIZARD_FEMALE_RECT = LRBT(left=185, right=310, bottom=50, top=170)
 
 # иконки действий
-MOVE_ACTION_TEXTURE = load_texture(file_path="src/sprites/perks/blazing-feet.png")
-PASS_ACTION_TEXTURE = load_texture(file_path="src/sprites/perks/armor-0.png")
+MOVE_ACTION_TEXTURE = load_texture(file_path=move_action)
+PASS_ACTION_TEXTURE = load_texture(file_path=pass_action)
 
 # иконки способностей
-HEALING_HAND_TEXTURE = load_texture(file_path="src/sprites/perks/heal-jade-3.png")
-LIGHT_SHIELD_TEXTURE = load_texture(file_path="src/sprites/perks/protect-sky-1.png")
-MEDIUM_SHIELD_TEXTURE = load_texture(file_path="src/sprites/perks/protect-sky-2.png")
-GREAT_SHIELD_TEXTURE = load_texture(file_path="src/sprites/perks/protect-sky-3.png")
-DS_SWORD_TEXTURE = load_texture(file_path="src/sprites/perks/w_longsword_gold.png")
-DAGGER_TEXTURE = load_texture(file_path="src/sprites/perks/w_dagger_steel.png")
-TWO_DAGGERS_TEXTURE = load_texture(file_path="src/sprites/perks/w_dagger_gold.png")
-SWORD_OH_TEXTURE = load_texture(file_path="src/sprites/perks/w_shortsword_steel.png")
-SWORD_BASTARD_TEXTURE = load_texture(file_path="src/sprites/perks/w_longsword_steel.png")
-SWORD_TH_TEXTURE = load_texture(file_path="src/sprites/perks/w_broadsword_steel.png")
-AXE_TEXTURE = load_texture(file_path="src/sprites/perks/w_axe_war_steel.png")
-BOW_TEXTURE = load_texture(file_path="src/sprites/perks/archer.png")
-FISTS_TEXTURE = load_texture(file_path="src/sprites/perks/wind-grasp-air-1.png")
-D_S_SPELL_TEXTURE = load_texture(file_path="src/sprites/perks/slice-orange-3.png")
-F_B_SPELL_TEXTURE = load_texture(file_path="src/sprites/perks/fireball-red-2.png")
-F_T_SPELL_TEXTURE = load_texture(file_path="src/sprites/perks/horror-eerie-3.png")
-I_S_SPELL_TEXTURE = load_texture(file_path="src/sprites/perks/ice-blue-3.png")
-S_B_SPELL_TEXTURE = load_texture(file_path="src/sprites/perks/enchant-magenta-3.png")
-M_M_SPELL_TEXTURE = load_texture(file_path="src/sprites/perks/fire-arrows-magenta-3.png")
+HEALING_HAND_TEXTURE = load_texture(file_path=healing_hand)
+LIGHT_SHIELD_TEXTURE = load_texture(file_path=light_shield)
+MEDIUM_SHIELD_TEXTURE = load_texture(file_path=medium_shield)
+GREAT_SHIELD_TEXTURE = load_texture(file_path=great_shield)
+DS_SWORD_TEXTURE = load_texture(file_path=ds_sword)
+DAGGER_TEXTURE = load_texture(file_path=dagger)
+TWO_DAGGERS_TEXTURE = load_texture(file_path=two_daggers)
+SWORD_OH_TEXTURE = load_texture(file_path=sword_oh)
+SWORD_BASTARD_TEXTURE = load_texture(file_path=sword_bastard)
+SWORD_TH_TEXTURE = load_texture(file_path=sword_th)
+AXE_TEXTURE = load_texture(file_path=axe)
+BOW_TEXTURE = load_texture(file_path=bow)
+FISTS_TEXTURE = load_texture(file_path=fists)
+D_S_SPELL_TEXTURE = load_texture(file_path=d_s_spell)
+F_B_SPELL_TEXTURE = load_texture(file_path=f_b_spell)
+F_T_SPELL_TEXTURE = load_texture(file_path=f_t_spell)
+I_S_SPELL_TEXTURE = load_texture(file_path=i_s_spell)
+S_B_SPELL_TEXTURE = load_texture(file_path=s_b_spell)
+M_M_SPELL_TEXTURE = load_texture(file_path=m_m_spell)
