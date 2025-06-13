@@ -1,6 +1,6 @@
 from models.item import Spell
 from src.utils.enums import MagicType
-from src.models.effect import Elemental, Heal
+from src.models.effect import Elemental, Heal, Sacrifice
 
 
 class DivineSmite(Spell):
@@ -121,5 +121,22 @@ class HealingHand(Spell):
             title="Исцеление",
             effect=effect,
             damage=8,
+            magic_type=MagicType.force.value,
+        )
+
+
+class SacrificeEnemy(Spell):
+
+    def __init__(self):
+        effect = Sacrifice(
+            name="SacrificeEnemy",
+            title="Пожертвовать",
+            item=self,
+        )
+        super().__init__(
+            name="SacrificeEnemy",
+            title="Пожертвовать",
+            effect=effect,
+            damage=1,
             magic_type=MagicType.force.value,
         )

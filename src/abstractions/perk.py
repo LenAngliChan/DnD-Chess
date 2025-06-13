@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from src.utils.descriptions import PERK_LONG_DESC
 
@@ -26,6 +26,7 @@ class BasePerk(ABC):
         status: "BaseAttribute",
         modifier: "BaseAttribute",
         texture: "Texture",
+        person: "BaseUnit" = None,
     ):
         """Инициализация способности
 
@@ -37,9 +38,11 @@ class BasePerk(ABC):
             status: статус способности
             modifier: модификатор способности
             texture: иконка способности
+            person: персонаж
         """
         self._name = name
         self._title = title
+        self._person = person
         self._item = item
         self._attribute = attribute
         self._status = status
@@ -91,6 +94,14 @@ class BasePerk(ABC):
     @property
     def radius(self) -> int:
         return self._radius
+
+    @property
+    def person(self) -> Optional["BaseUnit"]:
+        return self._person
+
+    @person.setter
+    def person(self, value: "BaseUnit") -> None:
+        self._person = value
 
     @abstractmethod
     def activate(self, target: "BaseUnit", **kwargs: "F_spec.kwargs") -> None:

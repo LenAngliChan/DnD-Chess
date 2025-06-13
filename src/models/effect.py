@@ -316,11 +316,7 @@ class Shield(Effect):
         Returns:
             int: значение
         """
-        value = self.item_value(**kwargs)
-        info_context.update(
-            value=EFFECT_HIT_VALUE_MSG.format(value=value, mastery=0),
-        )
-        return value
+        return self.item_value(**kwargs)
 
     def apply(
         self,
@@ -542,3 +538,44 @@ class Buff(Effect):
         """
         # расчет значений бафа/дебафа
         pass
+
+
+class Sacrifice(Effect):
+    """Модель эффекта - жертва"""
+
+    def __init__(
+        self,
+        name: str,
+        title: str,
+        item: "BaseItem",
+    ):
+        """Инициализация эффекта
+
+        Args:
+            name: имя эффекта
+            title: имя эффекта для отображения на gui
+            item: предмет
+        """
+        super().__init__(
+            name=name,
+            title=title,
+            item=item,
+        )
+
+    def apply(
+        self,
+        target: "BaseUnit",
+        hit: bool,
+        crit: bool,
+        **kwargs: "F_spec.kwargs",
+    ) -> None:
+        """Применить эффект к цели
+
+        Args:
+            target: цель способности
+            hit: бросок на попадание
+            crit: бросок на критический удар
+            kwargs: дополнительные параметры
+        """
+        # жертвуем плененную вражескую фигуру
+        target.level_up()

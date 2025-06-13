@@ -9,6 +9,8 @@ if TYPE_CHECKING:
     from src.abstractions.domain import BaseDomain
     from src.abstractions.figure import BaseFigure
     from src.abstractions.building import BaseBuilding
+    from src.abstractions.action import BaseAction
+    from collections import UserDict
 
 
 class CellSprite(BaseCellSprite):
@@ -64,3 +66,12 @@ class Cell(BaseCell):
         """Захватить клетку"""
         self.figure = figure    # через setter, там доп. логика
         self.change_domain(target=figure.domain)
+
+    def get_figure_actions(self) -> "UserDict[str, BaseAction]":
+        """Получить список действий фигуры
+
+        Returns:
+            iterable: список действий
+        """
+        if self._figure:
+            return self._figure.get_actions()

@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from tests.test_data.figures import TestBarbarian, TestCleric, TestWarlock
 from src.board.domains import RedDomain, BlueDomain
+from src.board.buildings import Castle, Altar
 from src.models.cell import Cell
 from src.utils.tools import Index
 from src.utils.enums import ActionType, PerkStatus, PerkType
@@ -36,19 +37,33 @@ def barbarian_cell(red_domain) -> "BaseCell":
 @pytest.fixture()
 def warlock_cell(blue_domain) -> "BaseCell":
     index = Index(row=0, column=1)
-    return Cell(
+    building = Altar(
         index=index,
         domain=blue_domain,
     )
+    cell = Cell(
+        index=index,
+        domain=blue_domain,
+    )
+    cell.building = building
+
+    return cell
 
 
 @pytest.fixture()
 def cleric_cell(red_domain) -> "BaseCell":
     index = Index(row=1, column=0)
-    return Cell(
+    building = Castle(
         index=index,
         domain=red_domain,
     )
+    cell = Cell(
+        index=index,
+        domain=red_domain,
+    )
+    cell.building = building
+
+    return cell
 
 
 @pytest.fixture()
@@ -274,3 +289,35 @@ def test_armor_action(
             "Способность должна уйти на перезарядку!"
         assert (base_cleric_defence + defence_buff) == next_cleric_defence, \
             "Фигура должна получить урон!"
+
+
+def test_building_action(
+    cleric_cell,
+    cleric_figure,
+    warlock_cell,
+    warlock_figure,
+):
+    # проверка исцеления от замка
+    cleric_figure.unit.defend_self(damage=100)
+    for index in range(3):
+        base_hp_percent = cleric_figure.unit.hp_percent
+        cleric_cell.building.end_turn()
+        next_hp_percent = cleric_figure.unit.hp_percent
+        assert not isclose(
+            a=base_hp_percent,
+            b=next_hp_percent,
+        ), "Не сработал эффект здания!"
+
+    # проверка дара алтаря
+    for index in range(3):
+        base_hp = warlock_figure.unit.hit_points
+        warlock_cell.building._action.realise(
+            current_cell=warlock_cell,
+            target=warlock_cell,
+        )
+        warlock_cell.building.end_turn()
+        next_hp = warlock_figure.unit.hit_points
+        assert not isclose(
+            a=base_hp,
+            b=next_hp,
+        ), "Не сработал эффект здания!"

@@ -71,19 +71,6 @@ class Board(BaseBoard):
                 )
                 self._cells[new_cell.index.name] = new_cell
 
-    def initialize_figures(self):
-        """Создать фигуры"""
-        figures_position = get_figures_position()
-        for cell in self._cells.values():
-            figure_fabric = figures_position.get(cell.index.name)
-            if figure_fabric:
-                new_figure = figure_fabric(
-                    index=cell.index,
-                    domain=cell.domain,
-                )
-                cell.figure = new_figure
-                self._figures[new_figure.name] = new_figure
-
     def initialize_buildings(self):
         """Создать здания"""
         for cell in self._cells.values():
@@ -96,6 +83,19 @@ class Board(BaseBoard):
                 )
                 cell.building = new_building
                 self._buildings[new_building.index.name] = new_building
+
+    def initialize_figures(self):
+        """Создать фигуры"""
+        figures_position = get_figures_position()
+        for cell in self._cells.values():
+            figure_fabric = figures_position.get(cell.index.name)
+            if figure_fabric:
+                new_figure = figure_fabric(
+                    index=cell.index,
+                    domain=cell.domain,
+                )
+                cell.figure = new_figure
+                self._figures[new_figure.name] = new_figure
 
     def fill_domains(self):
         """Заполнить домены объектами"""
@@ -132,7 +132,7 @@ class Board(BaseBoard):
             info_context.set(value=CELL_SELECT_MSG.format(cell=cell))
             if cell.figure:
                 info_context.update(value=FIGURE_SELECT_MSG.format(figure=cell.figure))
-                if cell.domain.turn:
+                if cell.figure.domain.turn:
                     # действие по умолчанию - движение
                     actions = self.get_figure_action_list()
                     if actions:
@@ -167,7 +167,7 @@ class Board(BaseBoard):
         """
         if not self._current_cell:
             info_context.set(value=NO_CELL_MSG)
-        elif not self._current_cell.domain.turn:
+        elif not self._current_cell.figure.domain.turn:
             info_context.set(value=WRONG_DOMAIN_MSG.format(domain=self._time))
         elif not self._current_action:
             info_context.set(value=NO_FIGURE_MSG)
@@ -190,7 +190,7 @@ class Board(BaseBoard):
             dict: список действий
         """
         if self._current_cell.figure:
-            return self._current_cell.figure.get_actions()
+            return self._current_cell.get_figure_actions()
 
     def get_cell_neighbors(self, radius: int = 1) -> Iterable[str]:
         """Получить список индексов допустимых клеток в качестве цели (соседей)
@@ -200,12 +200,15 @@ class Board(BaseBoard):
         """
 
         if self._current_cell:
+            indexes = []
+            for r in range(1, radius + 1):
+                indexes.extend([(-r, 0), (r, 0), (0, -r), (0, r)])
             cell_neighbors = [
                 Index(
                     column=self._current_cell.index.column + i,
                     row=self._current_cell.index.row + j,
                 ).name
-                for i, j in [(-radius, 0), (radius, 0), (0, -radius), (0, radius)]
+                for i, j in indexes
             ]
             cell_neighbors.append(self._current_cell.index.name)
         else:
@@ -221,6 +224,7 @@ class Board(BaseBoard):
 
     def finish_circle(self):
         """Завершить один цикл битвы"""
+        # в зависимости от цикла дня, пропускаем ходы доменов
         if self._time == Time.day.value:
             self._time = Time.night.value
             self._red_domain.end_turn()
@@ -229,6 +233,12 @@ class Board(BaseBoard):
             self._time = Time.day.value
             self._blue_domain.end_turn()
             self._red_domain.end_circle()
+        # активируем эффекты зданий
+        for buildings in self._buildings.values():
+            buildings.end_turn()
+        # проверяем статусы фигур
+        for figure in self._figures.values():
+            figure.check_status()
 
     def _start_action(self, target: "BaseCell"):
         self._current_action.realise(

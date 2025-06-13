@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from src.utils.descriptions import ACTION_SHORT_DESC
 
@@ -19,7 +19,7 @@ class BaseAction(ABC):
         name: str,
         attribute: "BaseAttribute",
         texture: "Texture",
-        figure: "BaseFigure",
+        figure: "BaseFigure" = None,
         perk: "BasePerk" = None,
     ):
         """Инициализация действия
@@ -59,8 +59,14 @@ class BaseAction(ABC):
         return self._attribute
 
     @property
-    def figure(self) -> "BaseFigure":
+    def figure(self) -> Optional["BaseFigure"]:
         return self._figure
+
+    @figure.setter
+    def figure(self, value: Optional["BaseFigure"]) -> None:
+        self._figure = value
+        if self._perk and self._figure:
+            self._perk.person = self._figure.unit
 
     @property
     def perk(self) -> "BasePerk":

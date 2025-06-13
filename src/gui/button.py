@@ -5,12 +5,13 @@ from src.models.button import Button
 from src.utils.tools import info_context
 from src.utils.constants import CELL_SIZE
 from src.utils.messages import NEXT_DOMAIN_MSG, ACTION_CHOOSE_MSG
-from src.utils.enums import ActionType
+from src.utils.enums import ActionType, PerkType
 
 if TYPE_CHECKING:
     from src.utils.tools import Index
     from src.abstractions.board import BaseBoard
     from src.abstractions.action import BaseAction
+    from src.gui.action_box import ActionBox
 
 
 class StartButton(Button):
@@ -95,7 +96,23 @@ class ActionButton(Button):
         if self._board.started and self._action and self.visible:
             self._board.select_action(action=self._action)
             info_context.set(value=ACTION_CHOOSE_MSG.format(action=self._action.desc))
-            # пропуск хода активируем сразу
-            if self._action.attribute == ActionType.defend.value:
-                self._action.realise(current_cell=self._board.current_cell)
+            if (
+                    # пропуск хода активируем сразу
+                    self._action.attribute == ActionType.defend.value
+                    or
+                    # защитную стойку активируем сразу
+                    self._action.perk.attribute == PerkType.shield.value
+            ):
+                self._activate_immediately()
             return True
+
+    def _activate_immediately(self) -> None:
+        """Немедленная активация действия"""
+        self._action.realise(
+            current_cell=self._board.current_cell,
+            target=self._board.current_cell,
+        )
+        # пробуем скрыть панель действий
+        if self.parent:
+            action_box: "ActionBox" = self.parent
+            action_box.hide_actions()

@@ -87,6 +87,14 @@ class BaseDomain(ABC):
         """Очередь домена"""
         return self._turn
 
+    @property
+    def figures(self) -> UserDict[str, "BaseFigure"]:
+        return self._figures
+
+    @property
+    def prisoners(self) -> UserDict[str, "BaseFigure"]:
+        return self._prisoners
+
     @abstractmethod
     def set_figures(self, figures: Iterable["BaseFigure"]) -> None:
         """Установить фигуры домена

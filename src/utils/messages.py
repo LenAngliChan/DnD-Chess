@@ -42,6 +42,8 @@ ACTION_WRONG_MOVE_MSG = "Невозможно переместиться на к
 ACTION_WRONG_USE_MSG = "Нельзя атаковать самого себя оружием или магией!"
 ACTION_NO_FIGURE_MSG = "Чтобы использовать способность нужна цель!"
 ACTION_CANNOT_MOVE_MSG = "Фигура не может передвигаться!"
+ACTION_NO_SACRIFICE_MSG = "Нет жертвы, чтобы пожертвовать алтарю!"
+ACTION_SACRIFICE_MSG = "Фигура {figure} жертвует алтарю {target} и повышает свой уровень!"
 
 # Сообщения о выборе цели
 CELL_SELECT_MSG = "Выбрана цель: {cell}"

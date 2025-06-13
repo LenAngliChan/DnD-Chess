@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Iterable, Union
 
 from src.utils.tools import info_context
 from src.abstractions.perk import BasePerk
-from src.utils.enums import PerkType, PerkStatus, RollModifier, ActionKWArgs
+from src.utils.enums import PerkType, PerkStatus, RollModifier
 from models.dice import (
     StaticDice,
     CritRoll,
@@ -45,9 +45,9 @@ class Perk(BasePerk):
         attribute: "BaseAttribute",
         status: "BaseAttribute",
         modifier: "BaseAttribute",
-        person: "BaseUnit",
         difficulty_dice: "BaseDice",
         texture: "Texture",
+        person: "BaseUnit" = None,
         resistance_dice: Union["BaseDice", int] = 0,
     ):
         """Инициализация способности
@@ -72,8 +72,8 @@ class Perk(BasePerk):
             status=status,
             modifier=modifier,
             texture=texture,
+            person=person,
         )
-        self._person = person
         self._difficulty = DifficultyRoll(
             dice=difficulty_dice,
             modifier=modifier,
@@ -138,6 +138,7 @@ class Perk(BasePerk):
         Returns:
             int: значение
         """
+
         return self._person.crit_chance
 
     @staticmethod
@@ -255,8 +256,8 @@ class Melee(Perk):
         name: str,
         title: str,
         weapon: "BaseItem",
-        person: "BaseUnit",
         texture: "Texture",
+        person: "BaseUnit" = None,
         attribute: "BaseAttribute" = PerkType.melee.value,
         status: "BaseAttribute" = PerkStatus.active.value,
         modifier: "BaseAttribute" = RollModifier.standard.value,
@@ -311,8 +312,8 @@ class Armor(Perk):
         name: str,
         title: str,
         shield: "BaseItem",
-        person: "BaseUnit",
         texture: "Texture",
+        person: "BaseUnit" = None,
         attribute: "BaseAttribute" = PerkType.shield.value,
         status: "BaseAttribute" = PerkStatus.active.value,
         modifier: "BaseAttribute" = RollModifier.standard.value,
@@ -344,6 +345,20 @@ class Armor(Perk):
             texture=texture,
         )
 
+    def action(self, target: "BaseUnit", **kwargs: "F_spec.kwargs") -> None:
+        """Укрыться щитом
+
+        Args:
+            target: цель способности
+            kwargs: дополнительные параметры
+        """
+        self._item.charge(
+            target=target,
+            hit=True,
+            crit=False,
+            **kwargs,
+        )
+
 
 class Magic(Perk):
     """Модель способности - использование магии"""
@@ -353,8 +368,8 @@ class Magic(Perk):
         name: str,
         title: str,
         spell: "BaseItem",
-        person: "BaseUnit",
         texture: "Texture",
+        person: "BaseUnit" = None,
         attribute: "BaseAttribute" = PerkType.elemental.value,
         status: "BaseAttribute" = PerkStatus.active.value,
         modifier: "BaseAttribute" = RollModifier.standard.value,
@@ -389,6 +404,60 @@ class Magic(Perk):
         )
 
 
+class Passive(Perk):
+    """Модель способности - использовать пассивную способность"""
+
+    def __init__(
+        self,
+        name: str,
+        title: str,
+        item: "BaseItem",
+        texture: "Texture",
+        person: "BaseUnit" = None,
+        attribute: "BaseAttribute" = PerkType.effect.value,
+        status: "BaseAttribute" = PerkStatus.active.value,
+        modifier: "BaseAttribute" = RollModifier.standard.value,
+    ):
+        """Инициализация способности
+
+        Args:
+            name: имя способности
+            title: имя способности для отображения на gui
+            item: предмет
+            attribute: тип способности
+            status: статус способности
+            modifier: модификатор способности
+            person: персонаж
+            texture: иконка способности
+        """
+        difficulty_dice = StaticDice(side=0)
+        super().__init__(
+            name=name,
+            title=title,
+            item=item,
+            attribute=attribute,
+            status=status,
+            modifier=modifier,
+            person=person,
+            difficulty_dice=difficulty_dice,
+            texture=texture,
+        )
+
+    def action(self, target: "BaseUnit", **kwargs: "F_spec.kwargs") -> None:
+        """Использовать пассивный эффект
+
+        Args:
+            target: цель способности
+            kwargs: дополнительные параметры
+        """
+        self._item.charge(
+            target=target,
+            hit=True,
+            crit=False,
+            **kwargs,
+        )
+
+
 class PerkCombination(BasePerk):
     """Модель способности - комбинированная атака (оружие + заклинание)"""
 
@@ -403,7 +472,7 @@ class PerkCombination(BasePerk):
         Args:
             name: имя
             main_perk: главная способность
-            effects: список эффектов (дополнительных способностей)
+            other_perks: список эффектов (дополнительных способностей)
         """
         super().__init__(
             name=name,

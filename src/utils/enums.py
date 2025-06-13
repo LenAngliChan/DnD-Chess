@@ -64,16 +64,11 @@ class ActionType(BaseAttribute):
     move = "Движение"
     use = "Использование"
     defend = "Пропуск хода"
+    only_building = "Эффект здания"
+    sacrifice = "Жертва"
 
 
 class FigureStatus(BaseAttribute):
     alive = "Живой"
     captive = "Захвачен"
     killed = "Убит"
-
-
-class ActionKWArgs(BaseAttribute):
-    domain_bonus = "Сила Домена"
-    building_bonus = "Защита Башни"
-    mastery = "Мастерство"
-    resist = "Сопротивление"

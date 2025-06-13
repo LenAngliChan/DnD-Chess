@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from src.utils.tools import Index
     from src.abstractions.figure import BaseFigure
     from src.abstractions.domain import BaseDomain
+    from src.abstractions.action import BaseAction
 
 
 class Building(BaseBuilding):
@@ -18,6 +19,7 @@ class Building(BaseBuilding):
         self,
         index: "Index",
         domain: "BaseDomain",
+        action: "BaseAction" = None,
         name: str = None,
         title: str = None,
         description: str = None,
@@ -30,6 +32,8 @@ class Building(BaseBuilding):
 
         Args:
             index: свойства графического объекта
+            domain: домен
+            action: действие (эффект здания)
             defence_bonus: бонус защиты
             figure: фигура
             can_change_domain: возможность сменить домен
@@ -46,6 +50,7 @@ class Building(BaseBuilding):
             core=core,
             title=title,
             description=description,
+            action=action,
             defence_bonus=defence_bonus,
             figure=figure,
             can_change_domain=can_change_domain,

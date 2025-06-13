@@ -5,7 +5,6 @@ from typing import Any
 from src.gui.grid import BoardGrid
 from src.models.board import Board
 from src.utils.tools import info_context, Index
-from src.utils.constants import CELL_SIZE
 
 
 class Chess(UIView):

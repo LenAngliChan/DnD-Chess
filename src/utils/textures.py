@@ -31,6 +31,7 @@ from src.sprites.perks import (
     i_s_spell,
     s_b_spell,
     m_m_spell,
+    sacrifice,
 )
 from src.sprites.units import units_sheet
 from src.sprites.buildings import altar_path, castle_path, crypt_path
@@ -117,3 +118,4 @@ F_T_SPELL_TEXTURE = load_texture(file_path=f_t_spell)
 I_S_SPELL_TEXTURE = load_texture(file_path=i_s_spell)
 S_B_SPELL_TEXTURE = load_texture(file_path=s_b_spell)
 M_M_SPELL_TEXTURE = load_texture(file_path=m_m_spell)
+ALTAR_GIFT_TEXTURE = load_texture(file_path=sacrifice)

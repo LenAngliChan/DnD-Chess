@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Iterable, Optional
 
 if TYPE_CHECKING:
     from src.abstractions.domain import BaseDomain
-    from src.abstractions.sprite import BaseImage
+    from src.abstractions.building import BaseBuilding
     from src.abstractions.cell import BaseCell
     from src.abstractions.figure import BaseFigure
     from src.utils.tools import BaseAttribute, Index
@@ -23,7 +23,7 @@ class BaseBoard(ABC):
         started: bool = False,
         cells: "UserDict[str, BaseCell]" = None,
         figures: "UserDict[str, BaseFigure]" = None,
-        buildings: "UserDict[str, BaseImage]" = None,
+        buildings: "UserDict[str, BaseBuilding]" = None,
     ):
         """Инициализация доски
 

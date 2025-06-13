@@ -11,6 +11,8 @@ if TYPE_CHECKING:
     from src.abstractions.domain import BaseDomain
     from src.abstractions.figure import BaseFigure
     from src.abstractions.building import BaseBuilding
+    from src.abstractions.action import BaseAction
+    from collections import UserDict
 
 
 class BaseCellSprite(BaseImage):
@@ -122,6 +124,8 @@ class BaseCell(UIAnchorLayout):
         self._figure = self.add(
             child=value,
         )
+        if self._building:
+            self._building.figure = self._figure
 
     def remove_figure(self) -> None:
         """Удалить фигуру с клетки"""
@@ -165,3 +169,12 @@ class BaseCell(UIAnchorLayout):
                 self._building.change_domain(target=target)
         else:
             self._sprite.change_domain(target=target)
+
+    @abstractmethod
+    def get_figure_actions(self) -> "UserDict[str, BaseAction]":
+        """Получить список действий фигуры
+
+        Returns:
+            iterable: список действий
+        """
+        pass

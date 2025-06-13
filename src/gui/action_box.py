@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, List
 from arcade.gui import UIBoxLayout
 
 from src.gui.button import ActionButton
+from src.utils.tools import Index
 from src.utils.constants import CELL_SIZE
 
 if TYPE_CHECKING:
@@ -20,7 +21,7 @@ class ActionBox(UIBoxLayout):
             vertical=False,
         )
         self._board = board
-        self._actions: List["ActionButton"] = []
+        self._actions: List[ActionButton] = []
 
     def prepare_buttons(self) -> None:
         """Подготовить панель кнопок действия"""
@@ -28,7 +29,10 @@ class ActionBox(UIBoxLayout):
         for column in range(1, 13):
             action = self.add(
                 child=ActionButton(
-                    index=(row, column),
+                    index=Index(
+                        row=row,
+                        column=column,
+                    ),
                     board=self._board,
                 ),
             )

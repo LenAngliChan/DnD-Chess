@@ -143,7 +143,7 @@ class BaseUnit(ABC):
     def __str__(self) -> str:
         """Полное описание персонажа"""
         return UNIT_LONG_DESC.format(
-            title=self.title,
+            title=self.desc,
             description=self._description,
             ability=self._ability,
             current_hp=self._current_hp,

@@ -2,11 +2,14 @@ from typing import TYPE_CHECKING, Optional
 
 from src.abstractions.sprite import BaseImage
 from src.utils.descriptions import BUILDING_SHORT_DESC, BUILDING_LONG_DESC
+from src.utils.enums import ActionType, PerkStatus
 
 if TYPE_CHECKING:
     from src.utils.tools import SpriteCore, Index
     from src.abstractions.domain import BaseDomain
     from src.abstractions.figure import BaseFigure
+    from src.abstractions.action import BaseAction
+    from src.abstractions.cell import BaseCell
 
 
 class BaseBuilding(BaseImage):
@@ -17,6 +20,7 @@ class BaseBuilding(BaseImage):
         core: "SpriteCore",
         title: str,
         description: str,
+        action: "BaseAction" = None,
         defence_bonus: int = 0,
         figure: "BaseFigure" = None,
         can_change_domain: bool = True,
@@ -25,6 +29,9 @@ class BaseBuilding(BaseImage):
 
         Args:
             core: свойства графического объекта
+            title: наименование для gui
+            description: описание
+            action: действие (эффект здания)
             defence_bonus: бонус защиты
             figure: фигура
             can_change_domain: возможность сменить домен
@@ -34,6 +41,7 @@ class BaseBuilding(BaseImage):
         )
         self.with_border(width=3, color=core.domain.color)
         self._figure = figure
+        self._action = action
         self._can_change_domain = can_change_domain
         self._defence_bonus = defence_bonus
         self._title = title
@@ -64,9 +72,25 @@ class BaseBuilding(BaseImage):
         return self._figure
 
     @figure.setter
-    def figure(self, value: BaseImage) -> None:
+    def figure(self, value: Optional["BaseFigure"]) -> None:
         """Установить фигуру внутри здания"""
+        # убрать действие с текущей фигуры
+        if self._figure and self._action:
+            self._action.figure = None
+            # если действие не для использования только зданиями
+            if not self._action.attribute == ActionType.only_building.value:
+                current_actions = self._figure.get_actions()
+                current_actions.pop(self._action.name)
+        # установить новую фигуру
         self._figure = value
+        if self._action:
+            self._action.figure = self._figure
+            # добавить новой фигуре действие
+            if self._figure:
+                # если действие не для использования только зданиями
+                if not self._action.attribute == ActionType.only_building.value:
+                    current_actions = self._figure.get_actions()
+                    current_actions[self._action.name] = self._action
 
     @property
     def can_change_domain(self) -> bool:
@@ -93,3 +117,15 @@ class BaseBuilding(BaseImage):
         """
         self._core.domain = target
         self.with_border(width=3, color=self._core.domain.color)
+
+    def end_turn(self) -> None:
+        """Завершить ход и активировать действие, уникальное для зданий"""
+        if self._action:
+            if self._action.attribute == ActionType.only_building.value:
+                if self.parent:
+                    parent: "BaseCell" = self.parent
+                    self._action.realise(
+                        current_cell=parent,
+                        target=parent,
+                    )
+            self._action.perk.change_status(value=PerkStatus.active.value)
