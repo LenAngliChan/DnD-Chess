@@ -102,14 +102,14 @@ class Ability(BaseAbility):
         elif attribute in (WeaponType.ranged.value, WeaponType.light.value):
             # мастерство легким оружием зависит от ловкости
             ability = self._dexterity
-        elif attribute in (MagicType.force.value, MagicType.dark.value):
-            # мастерство магии силы и тьмы зависит от мудрости
+        elif attribute == MagicType.force.value:
+            # мастерство магии силы зависит от мудрости
             ability = self._wisdom
         elif attribute in (MagicType.fire.value, MagicType.ice.value):
             # мастерство магии огня и льда зависит от интеллекта
             ability = self._intelligence
-        elif attribute in (MagicType.psychic.value, MagicType.radiant.value):
-            # мастерство магии иллюзий и света зависит от харизмы
+        elif attribute in (MagicType.psychic.value, MagicType.radiant.value, MagicType.dark.value):
+            # мастерство магии иллюзий, света и тьмы зависит от харизмы
             ability = self._charisma
         else:
             # все остальное по умолнчанию - выносливости

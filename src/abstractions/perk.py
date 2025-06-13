@@ -56,6 +56,7 @@ class BasePerk(ABC):
             title=self._title,
             item=self._item.title,
             type=self._item.attribute,
+            radius=self._item.radius,
         )
 
     @property

@@ -40,7 +40,7 @@ FIGURE_LONG_DESC = (
 
 # способности
 PERK_LONG_DESC = (
-    "{title} [{item}], Тип: {type}"
+    "{title} [{item}], Тип: {type}, Радиус атаки: {radius} (по горизонтали и вертикали)"
 )
 
 # предметы

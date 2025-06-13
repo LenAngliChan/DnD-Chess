@@ -25,13 +25,15 @@ from src.sprites.perks import (
     axe,
     bow,
     fists,
-    d_s_spell,
-    f_b_spell,
-    f_t_spell,
-    i_s_spell,
-    s_b_spell,
-    m_m_spell,
+    divine_smite_spell,
+    fire_ball_spell,
+    faery_tale_spell,
+    ice_storm_spell,
+    shadow_blade_spell,
+    magic_missile_spell,
     sacrifice,
+    bear_paws_spell,
+    fire_storm_spell,
 )
 from src.sprites.units import units_sheet
 from src.sprites.buildings import altar_path, castle_path, crypt_path
@@ -112,10 +114,12 @@ SWORD_TH_TEXTURE = load_texture(file_path=sword_th)
 AXE_TEXTURE = load_texture(file_path=axe)
 BOW_TEXTURE = load_texture(file_path=bow)
 FISTS_TEXTURE = load_texture(file_path=fists)
-D_S_SPELL_TEXTURE = load_texture(file_path=d_s_spell)
-F_B_SPELL_TEXTURE = load_texture(file_path=f_b_spell)
-F_T_SPELL_TEXTURE = load_texture(file_path=f_t_spell)
-I_S_SPELL_TEXTURE = load_texture(file_path=i_s_spell)
-S_B_SPELL_TEXTURE = load_texture(file_path=s_b_spell)
-M_M_SPELL_TEXTURE = load_texture(file_path=m_m_spell)
+DIVINE_SMITE_TEXTURE = load_texture(file_path=divine_smite_spell)
+FIRE_BALL_TEXTURE = load_texture(file_path=fire_ball_spell)
+FAERY_TALE_TEXTURE = load_texture(file_path=faery_tale_spell)
+ICE_STORM_TEXTURE = load_texture(file_path=ice_storm_spell)
+SHADOW_BLADE_TEXTURE = load_texture(file_path=shadow_blade_spell)
+MAGIC_MISSILE_TEXTURE = load_texture(file_path=magic_missile_spell)
+BEAR_PAWS_TEXTURE = load_texture(file_path=bear_paws_spell)
+FIRE_STORM_TEXTURE = load_texture(file_path=fire_storm_spell)
 ALTAR_GIFT_TEXTURE = load_texture(file_path=sacrifice)

@@ -2,12 +2,14 @@ from typing import TYPE_CHECKING
 
 from src.models.perk import Magic
 from src.utils.textures import (
-    D_S_SPELL_TEXTURE,
-    F_B_SPELL_TEXTURE,
-    F_T_SPELL_TEXTURE,
-    I_S_SPELL_TEXTURE,
-    S_B_SPELL_TEXTURE,
-    M_M_SPELL_TEXTURE,
+    DIVINE_SMITE_TEXTURE,
+    FIRE_BALL_TEXTURE,
+    FAERY_TALE_TEXTURE,
+    ICE_STORM_TEXTURE,
+    SHADOW_BLADE_TEXTURE,
+    MAGIC_MISSILE_TEXTURE,
+    BEAR_PAWS_TEXTURE,
+    FIRE_STORM_TEXTURE,
 )
 from src.items.spells import (
     DivineSmite,
@@ -16,6 +18,8 @@ from src.items.spells import (
     IceStorm,
     ShadowBlade,
     MagicMissile,
+    BearPaws,
+    FireStorm,
 )
 
 if TYPE_CHECKING:
@@ -31,7 +35,7 @@ class UseDivineSmite(Magic):
             title="Заклинание",
             spell=DivineSmite(),
             person=person,
-            texture=D_S_SPELL_TEXTURE,
+            texture=DIVINE_SMITE_TEXTURE,
         )
 
 
@@ -44,7 +48,7 @@ class UseFireBall(Magic):
             title="Заклинание",
             spell=FireBall(),
             person=person,
-            texture=F_B_SPELL_TEXTURE,
+            texture=FIRE_BALL_TEXTURE,
         )
 
 
@@ -57,7 +61,7 @@ class UseFaerieTale(Magic):
             title="Заклинание",
             spell=FaerieTale(),
             person=person,
-            texture=F_T_SPELL_TEXTURE,
+            texture=FAERY_TALE_TEXTURE,
         )
 
 
@@ -70,7 +74,7 @@ class UseIceStorm(Magic):
             title="Заклинание",
             spell=IceStorm(),
             person=person,
-            texture=I_S_SPELL_TEXTURE,
+            texture=ICE_STORM_TEXTURE,
         )
 
 
@@ -83,7 +87,7 @@ class UseShadowBlade(Magic):
             title="Заклинание",
             spell=ShadowBlade(),
             person=person,
-            texture=S_B_SPELL_TEXTURE,
+            texture=SHADOW_BLADE_TEXTURE,
         )
 
 
@@ -96,5 +100,31 @@ class UseMagicMissile(Magic):
             title="Заклинание",
             spell=MagicMissile(),
             person=person,
-            texture=M_M_SPELL_TEXTURE,
+            texture=MAGIC_MISSILE_TEXTURE,
+        )
+
+
+class UseBearPaws(Magic):
+    """Способность - использовать заклинание Гнев Природы"""
+
+    def __init__(self, person: "BaseUnit"):
+        super().__init__(
+            name="UseBearPaws",
+            title="Заклинание",
+            spell=BearPaws(),
+            person=person,
+            texture=BEAR_PAWS_TEXTURE,
+        )
+
+
+class UseFireStorm(Magic):
+    """Способность - использовать заклинание Огненный Шторм"""
+
+    def __init__(self, person: "BaseUnit"):
+        super().__init__(
+            name="UseFireStorm",
+            title="Заклинание",
+            spell=FireStorm(),
+            person=person,
+            texture=FIRE_STORM_TEXTURE,
         )

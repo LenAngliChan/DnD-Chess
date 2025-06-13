@@ -5,11 +5,13 @@ from src.units.units import (
     UnitBarbarian,
     UnitCleric,
     UnitWarlock,
+    UnitMonk,
 )
 from src.utils.characters import (
     barbarian,
     cleric,
     warlock,
+    monk,
 )
 
 if TYPE_CHECKING:
@@ -82,6 +84,29 @@ class TestWarlock(Figure):
             characteristic=warlock.characteristic,
         )
         texture = warlock.textures.day if domain.name == "Red" else warlock.textures.night
+        super().__init__(
+            index=index,
+            domain=domain,
+            texture=texture,
+            unit=unit,
+        )
+
+
+class TestMonkey(Figure):
+
+    def __init__(
+        self,
+        index: "Index",
+        name: str,
+        domain: "BaseDomain",
+    ):
+        unit = UnitMonk(
+            name=name,
+            title=monk.title,
+            description=monk.description,
+            characteristic=monk.characteristic,
+        )
+        texture = monk.textures.day if domain.name == "Red" else monk.textures.night
         super().__init__(
             index=index,
             domain=domain,

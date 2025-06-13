@@ -1,6 +1,6 @@
 from models.item import Spell
 from src.utils.enums import MagicType
-from src.models.effect import Elemental, Heal, Sacrifice
+from src.models.effect import Elemental, Heal, Sacrifice, Crush
 
 
 class DivineSmite(Spell):
@@ -104,7 +104,6 @@ class MagicMissile(Spell):
             effect=effect,
             damage=8,
             magic_type=MagicType.force.value,
-            radius=2,
         )
 
 
@@ -139,4 +138,38 @@ class SacrificeEnemy(Spell):
             effect=effect,
             damage=1,
             magic_type=MagicType.force.value,
+        )
+
+
+class BearPaws(Spell):
+
+    def __init__(self):
+        effect = Crush(
+            name="BearPaws",
+            title="Гнев Природы",
+            item=self,
+        )
+        super().__init__(
+            name="BearPaws",
+            title="Гнев Природы",
+            effect=effect,
+            damage=8,
+            magic_type=MagicType.force.value,
+        )
+
+
+class FireStorm(Spell):
+
+    def __init__(self):
+        effect = Elemental(
+            name="FireStorm",
+            title="Огненный Шторм",
+            item=self,
+        )
+        super().__init__(
+            name="FireStorm",
+            title="Огненный Шторм",
+            effect=effect,
+            damage=8,
+            magic_type=MagicType.fire.value,
         )

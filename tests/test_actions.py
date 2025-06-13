@@ -2,7 +2,12 @@ import pytest
 from numpy import isclose
 from typing import TYPE_CHECKING
 
-from tests.test_data.figures import TestBarbarian, TestCleric, TestWarlock
+from tests.test_data.figures import (
+    TestBarbarian,
+    TestCleric,
+    TestWarlock,
+    TestMonkey,
+)
 from src.board.domains import RedDomain, BlueDomain
 from src.board.buildings import Castle, Altar
 from src.models.cell import Cell
@@ -17,12 +22,27 @@ if TYPE_CHECKING:
 
 @pytest.fixture()
 def red_domain() -> "BaseDomain":
-    return RedDomain(title="Red")
+    domain = RedDomain(title="Red")
+    return domain
 
 
 @pytest.fixture()
 def blue_domain() -> "BaseDomain":
-    return BlueDomain(title="Blue")
+    domain = BlueDomain(title="Blue")
+    monkey_1 = TestMonkey(
+        index=Index(row=10, column=10),
+        name="m1",
+        domain=domain,
+    )
+    domain.get_prisoner(figure=monkey_1)
+    monkey_2 = TestMonkey(
+        index=Index(row=1, column=1),
+        name="m2",
+        domain=domain,
+    )
+    domain.get_prisoner(figure=monkey_2)
+
+    return domain
 
 
 @pytest.fixture()
@@ -317,7 +337,10 @@ def test_building_action(
         )
         warlock_cell.building.end_turn()
         next_hp = warlock_figure.unit.hit_points
-        assert not isclose(
-            a=base_hp,
-            b=next_hp,
-        ), "Не сработал эффект здания!"
+        if index < 2:
+            assert not isclose(
+                a=base_hp,
+                b=next_hp,
+            ), "Не сработал эффект здания!"
+        else:
+            assert base_hp == next_hp, "Должны были закончиться жертвы!"

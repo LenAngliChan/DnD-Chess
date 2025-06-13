@@ -10,7 +10,9 @@ from src.perks.active import (
 )
 from src.perks.melee import (
     AttackWithTwoDaggers,
+    AttackWithDagger,
     AttackWithSwordOH,
+    AttackWithSwordBastard,
     AttackWithSwordTH,
     AttackWithAxe,
     AttackWithBow,
@@ -21,6 +23,10 @@ from src.perks.elemental import (
     UseFaerieTale,
     UseIceStorm,
     UseShadowBlade,
+    UseBearPaws,
+    UseMagicMissile,
+    UseDivineSmite,
+    UseFireStorm,
 )
 
 if TYPE_CHECKING:
@@ -79,11 +85,16 @@ class UnitCleric(Unit):
     ):
         main_action = UseHealingHand(person=self)
         second_action = AttackWithSwordOH(person=self)
-        third_action = UseDefendStand(
+        third_action = UseDivineSmite(person=self)
+        fourth_action = UseDefendStand(
             person=self,
             shield=GreatShield(),
         )
-        perks = PerkCollection(perks=[main_action, second_action, third_action])
+        perks = PerkCollection(
+            perks=[
+                main_action, second_action, third_action, fourth_action
+            ]
+        )
         super().__init__(
             name=name,
             title=title,
@@ -102,10 +113,9 @@ class UnitDruid(Unit):
         description: str,
         characteristic: "Characteristic",
     ):
-        main_action = UseFaerieTale(person=self)
-        second_action = AttackWithSwordOH(person=self)
-        third_action = UseHealingHand(person=self)
-        perks = PerkCollection(perks=[main_action, second_action, third_action])
+        main_action = UseBearPaws(person=self)
+        second_action = UseHealingHand(person=self)
+        perks = PerkCollection(perks=[main_action, second_action])
         super().__init__(
             name=name,
             title=title,
@@ -189,7 +199,8 @@ class UnitRanger(Unit):
         characteristic: "Characteristic",
     ):
         main_action = AttackWithBow(person=self)
-        perks = PerkCollection(perks=[main_action])
+        second_action = AttackWithSwordBastard(person=self)
+        perks = PerkCollection(perks=[main_action, second_action])
         super().__init__(
             name=name,
             title=title,
@@ -229,7 +240,9 @@ class UnitSorcerer(Unit):
         characteristic: "Characteristic",
     ):
         main_action = UseFireBall(person=self)
-        perks = PerkCollection(perks=[main_action])
+        second_action = UseFireStorm(person=self)
+        third_action = AttackWithDagger(person=self)
+        perks = PerkCollection(perks=[main_action, second_action, third_action])
         super().__init__(
             name=name,
             title=title,
@@ -269,7 +282,9 @@ class UnitWizard(Unit):
         characteristic: "Characteristic",
     ):
         main_action = UseIceStorm(person=self)
-        perks = PerkCollection(perks=[main_action])
+        second_action = UseMagicMissile(person=self)
+        third_action = AttackWithDagger(person=self)
+        perks = PerkCollection(perks=[main_action, second_action, third_action])
         super().__init__(
             name=name,
             title=title,
