@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from src.models.unit import Unit
 from models.collection import PerkCollection
-from src.items.armors import MediumShield
+from src.items.armors import MediumShield, GreatShield
 from src.perks.active import (
     UseHealingHand,
     AttackWithSwordBySpell,
@@ -81,7 +81,7 @@ class UnitCleric(Unit):
         second_action = AttackWithSwordOH(person=self)
         third_action = UseDefendStand(
             person=self,
-            shield=MediumShield(),
+            shield=GreatShield(),
         )
         perks = PerkCollection(perks=[main_action, second_action, third_action])
         super().__init__(
@@ -165,7 +165,11 @@ class UnitPaladin(Unit):
         characteristic: "Characteristic",
     ):
         main_action = AttackWithSwordBySpell(person=self)
-        perks = PerkCollection(perks=[main_action])
+        second_action = UseDefendStand(
+            person=self,
+            shield=MediumShield(),
+        )
+        perks = PerkCollection(perks=[main_action, second_action])
         super().__init__(
             name=name,
             title=title,

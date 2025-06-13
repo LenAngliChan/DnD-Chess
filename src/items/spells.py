@@ -34,6 +34,7 @@ class FireBall(Spell):
             effect=effect,
             damage=8,
             magic_type=MagicType.fire.value,
+            radius=2,
         )
 
 
@@ -68,6 +69,7 @@ class IceStorm(Spell):
             effect=effect,
             damage=8,
             magic_type=MagicType.ice.value,
+            radius=2,
         )
 
 
@@ -102,6 +104,7 @@ class MagicMissile(Spell):
             effect=effect,
             damage=8,
             magic_type=MagicType.force.value,
+            radius=2,
         )
 
 
@@ -118,5 +121,5 @@ class HealingHand(Spell):
             title="Исцеление",
             effect=effect,
             damage=8,
-            magic_type=MagicType.radiant.value,
+            magic_type=MagicType.force.value,
         )

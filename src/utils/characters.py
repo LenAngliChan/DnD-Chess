@@ -114,8 +114,8 @@ druid = Character(
         base_hp_coefficient=5,
     ),
     textures=Textures(
-        day=UNIT_SPRITE_SHEET.get_texture(rect=DRUID_MALE_RECT),
-        night=UNIT_SPRITE_SHEET.get_texture(rect=DRUID_FEMALE_RECT),
+        day=UNIT_SPRITE_SHEET.get_texture(rect=DRUID_FEMALE_RECT),
+        night=UNIT_SPRITE_SHEET.get_texture(rect=DRUID_MALE_RECT),
     ),
 )
 fighter = Character(

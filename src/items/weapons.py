@@ -121,6 +121,7 @@ class Bow(Weapon):
             effect=effect,
             damage=6,
             weapon_type=WeaponType.ranged.value,
+            radius=2,
         )
 
 

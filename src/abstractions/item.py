@@ -21,6 +21,7 @@ class BaseItem(ABC):
         value: "BaseRoll",
         effect: "BaseEffect",
         attribute: "BaseAttribute",
+        radius: int = 1,
     ):
         """Инициализация предмета
 
@@ -30,12 +31,14 @@ class BaseItem(ABC):
             value: значение предмета
             effect: эффект предмета
             attribute: тип предмета
+            radius: радиус действия
         """
         self._name = name
         self._title = title
         self._value = value
         self._effect = effect
         self._attribute = attribute
+        self._radius = radius
 
     def __str__(self) -> str:
         """Описание предмета"""
@@ -55,6 +58,10 @@ class BaseItem(ABC):
     def attribute(self) -> "BaseAttribute":
         """Атрибут"""
         return self._attribute
+
+    @property
+    def radius(self) -> int:
+        return self._radius
 
     def change_modifier(self, value: "BaseAttribute") -> None:
         """Изменить модификатор урона предмета

@@ -113,7 +113,7 @@ def test_move_action(
         )
         assert barbarian_cell.figure, "Фигура не должна переместиться!"
         assert warlock_cell.figure == warlock_figure, "Фигура не должна измениться!"
-        assert barbarian_cell.figure.can_move, "Фигура не должна пропустить ход!"
+        assert barbarian_figure.can_move, "Фигура не должна пропустить ход!"
 
         # пытаемся двигаться в клетку без фигуры
         move_action.realise(
@@ -123,7 +123,7 @@ def test_move_action(
         assert not barbarian_cell.figure, "Фигура должна переместиться!"
         assert empty_cell.figure == barbarian_figure, "Фигура должна измениться!"
         assert not barbarian_cell.figure, "Клетка должна стать пустой!"
-        assert not empty_cell.figure.can_move, "Фигура должна пропустить ход!"
+        assert not barbarian_figure.can_move, "Фигура должна пропустить ход!"
 
 
 def test_pass_action(
@@ -142,7 +142,7 @@ def test_pass_action(
             current_cell=barbarian_cell,
         )
         assert barbarian_cell.figure, "Фигура не должна переместиться!"
-        assert not barbarian_cell.figure.can_move, "Фигура должна пропустить ход!"
+        assert not barbarian_figure.can_move, "Фигура должна пропустить ход!"
 
 
 def test_melee_action(
@@ -168,7 +168,7 @@ def test_melee_action(
             target=warlock_cell,
         )
         assert barbarian_cell.figure, "Фигура не должна переместиться!"
-        assert barbarian_cell.figure.can_move, "Фигура не должна пропустить ход!"
+        assert barbarian_figure.can_move, "Фигура не должна пропустить ход!"
         assert use_action.perk.status == PerkStatus.done.value, \
             "Способность должна уйти на перезарядку!"
         assert not isclose(
@@ -204,7 +204,7 @@ def test_magic_action(
             target=barbarian_cell,
         )
         assert warlock_cell.figure, "Фигура не должна переместиться!"
-        assert warlock_cell.figure.can_move, "Фигура не должна пропустить ход!"
+        assert warlock_figure.can_move, "Фигура не должна пропустить ход!"
         assert use_action.perk.status == PerkStatus.done.value, \
             "Способность должна уйти на перезарядку!"
         assert not isclose(
@@ -230,10 +230,47 @@ def test_magic_action(
                 target=barbarian_cell,
             )
             assert cleric_cell.figure, "Фигура не должна переместиться!"
-            assert cleric_cell.figure.can_move, "Фигура не должна пропустить ход!"
+            assert cleric_figure.can_move, "Фигура не должна пропустить ход!"
             assert use_action.perk.status == PerkStatus.done.value, \
                 "Способность должна уйти на перезарядку!"
             assert isclose(
                 a=barbarian_figure.unit.hp_percent,
                 b=1.0,
             ), "Фигура должна исцелиться!"
+
+
+def test_armor_action(
+    cleric_cell,
+    cleric_figure,
+):
+    """Тест для проверки действия - защитная стойка"""
+    actions = cleric_figure.get_actions()
+    if actions:
+        # начальная защита
+        base_cleric_defence = cleric_figure.unit.defense
+        use_action = [
+            action
+            for action in actions.values()
+            if (
+                    action.attribute == ActionType.use.value
+                    and
+                    action.perk.attribute == PerkType.shield.value
+            )
+        ][0]
+
+        # прибавка защиты
+        defence_buff = use_action.perk._item._value._dice._side
+        use_action.realise(
+            current_cell=cleric_cell,
+            target=cleric_cell,
+        )
+
+        # итоговая защита
+        next_cleric_defence = cleric_figure.unit.defense
+
+        assert cleric_cell.figure, "Фигура не должна переместиться!"
+        assert cleric_figure.can_move, "Фигура не должна пропустить ход!"
+        assert use_action.perk.status == PerkStatus.done.value, \
+            "Способность должна уйти на перезарядку!"
+        assert (base_cleric_defence + defence_buff) == next_cleric_defence, \
+            "Фигура должна получить урон!"

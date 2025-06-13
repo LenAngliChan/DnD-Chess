@@ -9,6 +9,7 @@ from src.utils.messages import (
     SHIELD_APPLY_MSG,
     MAGIC_ATTACK_MSG,
     HEAL_APPLY_MSG,
+    RESIST_VALUE_MSG,
 )
 
 if TYPE_CHECKING:
@@ -55,7 +56,10 @@ class Effect(BaseEffect):
         Returns:
             int: значение
         """
-        return self._item.deal(bonus=domain_bonus, penalty=building_bonus)
+        return self._item.deal(
+            bonus=domain_bonus,
+            penalty=building_bonus,
+        )
 
     def hit_value(
         self,
@@ -72,7 +76,7 @@ class Effect(BaseEffect):
         """
         value = self.item_value(**kwargs)
         info_context.update(
-            value=EFFECT_HIT_VALUE_MSG.format(value=value, mastery=mastery)
+            value=EFFECT_HIT_VALUE_MSG.format(value=value, mastery=mastery),
         )
         return value + mastery
 
@@ -86,7 +90,7 @@ class Effect(BaseEffect):
         """
         value = self.item_value()
         info_context.update(
-            value=EFFECT_CRIT_VALUE_MSG.format(value=value)
+            value=EFFECT_CRIT_VALUE_MSG.format(value=value),
         )
         return value
 
@@ -157,7 +161,7 @@ class Cut(Effect):
                 result=value,
                 type=self._item.attribute,
                 name=target.title,
-            )
+            ),
         )
 
 
@@ -211,7 +215,7 @@ class Pierce(Effect):
                 result=value,
                 type=self._item.attribute,
                 name=target.title,
-            )
+            ),
         )
 
 
@@ -266,7 +270,7 @@ class Crush(Effect):
                 result=value,
                 type=self._item.attribute,
                 name=target.title,
-            )
+            ),
         )
 
 
@@ -292,6 +296,32 @@ class Shield(Effect):
             item=item,
         )
 
+    def item_value(self, **kwargs: "F_spec.kwargs"):
+        """Сделать бросок кубика предмета
+        При поднятии щита обычно нет бонусов и штрафов
+
+        Returns:
+            int: значение
+        """
+        return self._item.deal()
+
+    def hit_value(
+        self,
+        **kwargs: "F_spec.kwargs"
+    ) -> int:
+        """Значение предмета при попадании
+        Рассчитывается как:
+            бросок кубика предмета
+
+        Returns:
+            int: значение
+        """
+        value = self.item_value(**kwargs)
+        info_context.update(
+            value=EFFECT_HIT_VALUE_MSG.format(value=value, mastery=0),
+        )
+        return value
+
     def apply(
         self,
         target: "BaseUnit",
@@ -315,7 +345,7 @@ class Shield(Effect):
             value=SHIELD_APPLY_MSG.format(
                 result=value,
                 name=target.title,
-            )
+            ),
         )
 
 
@@ -359,6 +389,9 @@ class Elemental(Effect):
         # расчет магического урона
         value = self.hit_value(**kwargs)
         resist = target.magic_resistance
+        info_context.update(
+            value=RESIST_VALUE_MSG.format(resist=resist),
+        )
         if hit:
             if crit:
                 value += self.crit_value()
@@ -375,7 +408,7 @@ class Elemental(Effect):
                 result=value,
                 type=self._item.attribute,
                 name=target.title,
-            )
+            ),
         )
 
 
@@ -428,6 +461,9 @@ class Heal(Effect):
         # расчет исцеления
         value = self.hit_value(**kwargs)
         resist = target.magic_resistance
+        info_context.update(
+            value=RESIST_VALUE_MSG.format(resist=resist),
+        )
         if hit:
             if crit:
                 value += self.crit_value()
@@ -445,7 +481,7 @@ class Heal(Effect):
                     result=value,
                     type=self._item.attribute,
                     name=target.title,
-                )
+                ),
             )
             target.defend_self(damage=value)
         else:
@@ -453,7 +489,7 @@ class Heal(Effect):
                 value=HEAL_APPLY_MSG.format(
                     result=value,
                     name=target.title,
-                )
+                ),
             )
             target.heal_self(value=value)
 

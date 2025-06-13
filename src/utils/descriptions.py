@@ -28,6 +28,7 @@ UNIT_LONG_DESC = (
     "{description}\n"
     "{ability}\n"
     "Здоровье: {current_hp}\n"
+    "Защита: {defence}\n"
     "Способности: \n"
     "{perks_title}"
 )

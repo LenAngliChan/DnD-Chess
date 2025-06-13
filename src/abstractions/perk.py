@@ -45,6 +45,7 @@ class BasePerk(ABC):
         self._status = status
         self._modifier = modifier
         self._texture = texture
+        self._radius = item.radius
 
     def __str__(self) -> str:
         """Полное описание способности"""
@@ -86,6 +87,10 @@ class BasePerk(ABC):
     @property
     def status(self) -> "BaseAttribute":
         return self._status
+
+    @property
+    def radius(self) -> int:
+        return self._radius
 
     @abstractmethod
     def activate(self, target: "BaseUnit", **kwargs: "F_spec.kwargs") -> None:

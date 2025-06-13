@@ -147,6 +147,7 @@ class BaseUnit(ABC):
             description=self._description,
             ability=self._ability,
             current_hp=self._current_hp,
+            defence=self.defense,
             perks_title=self.perks_title,
         )
 

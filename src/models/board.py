@@ -173,7 +173,7 @@ class Board(BaseBoard):
             info_context.set(value=NO_FIGURE_MSG)
         else:
             if index.name in self.get_cell_neighbors(
-                radius=1,    # в будущем будет радиус атаки
+                radius=self._current_action.radius,
             ):
                 cell = self._cells.get(index.name)
                 self._start_action(target=cell)

@@ -22,6 +22,7 @@ class Item(BaseItem):
         effect: "BaseEffect",
         attribute: "BaseAttribute",
         modifier: "BaseAttribute" = RollModifier.standard.value,
+        radius: int = 1,
         times: int = 1,
     ):
         """Инициализация предмета
@@ -33,6 +34,7 @@ class Item(BaseItem):
             effect: эффект предмета
             attribute: тип предмета
             modifier: модификатор предмета
+            radius: радиус действия
             times: количество бросков кости
         """
         value = DiceRoll(
@@ -46,6 +48,7 @@ class Item(BaseItem):
             value=value,
             effect=effect,
             attribute=attribute,
+            radius=radius,
         )
 
     def deal(self, **kwargs: "F_spec.kwargs") -> int:
@@ -68,6 +71,7 @@ class Weapon(Item):
         effect: "BaseEffect",
         damage: int = 4,
         weapon_type: "BaseAttribute" = WeaponType.medium.value,
+        radius: int = 1,
         times: int = 1,
     ):
         """Инициализация оружия
@@ -78,6 +82,7 @@ class Weapon(Item):
             effect: эффект предмета
             damage: урон оружия
             weapon_type: тип оружия
+            radius: радиус действия
             times: количество бросков кости
         """
         value_dice = Dice(side=damage)
@@ -87,6 +92,7 @@ class Weapon(Item):
             value_dice=value_dice,
             effect=effect,
             attribute=weapon_type,
+            radius=radius,
             times=times,
         )
 
@@ -101,6 +107,7 @@ class Spell(Item):
         effect: "BaseEffect",
         damage: int = 4,
         magic_type: "BaseAttribute" = MagicType.fire.value,
+        radius: int = 1,
         times: int = 1,
     ):
         """Инициализация заклинания
@@ -111,6 +118,7 @@ class Spell(Item):
             effect: эффект предмета
             damage: урон заклинания
             magic_type: тип заклинания
+            radius: радиус действия
             times: количество бросков кости
         """
         value_dice = Dice(side=damage)
@@ -120,6 +128,7 @@ class Spell(Item):
             value_dice=value_dice,
             effect=effect,
             attribute=magic_type,
+            radius=radius,
             times=times,
         )
 
@@ -133,6 +142,7 @@ class Armor(Item):
         title: str,
         effect: "BaseEffect",
         defence: int = 4,
+        radius: int = 1,
         armor_type: "BaseAttribute" = ArmorType.medium_shield.value,
     ):
         """Инициализация брони
@@ -142,6 +152,7 @@ class Armor(Item):
             title: имя предмета для отображения на gui
             effect: эффект предмета
             defence: защита брони
+            radius: радиус действия
             armor_type: тип брони
         """
         value_dice = StaticDice(side=defence)
@@ -151,4 +162,5 @@ class Armor(Item):
             value_dice=value_dice,
             effect=effect,
             attribute=armor_type,
+            radius=radius,
         )

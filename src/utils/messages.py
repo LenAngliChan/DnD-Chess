@@ -19,6 +19,7 @@ PERK_ACTIVATE_MSG = "Способность {name} использована на
 PERK_HIT_CHANCE_MSG = "Бросок на попадание фигуры"
 PERK_CRIT_CHANCE_MSG = "Бросок на критический удар фигуры"
 EFFECT_HIT_VALUE_MSG = "Урон способности {value}, бонус мастерства {mastery}"
+RESIST_VALUE_MSG = "У цели {resist} магической защиты!"
 EFFECT_CRIT_VALUE_MSG = "Критический урон {value}"
 MELEE_ATTACK_MSG = "Результат физической атаки: {result} {type} урона по цели {name}"
 SHIELD_APPLY_MSG = "Результат защитной стойки: {result} дополнительной защиты для {name}"

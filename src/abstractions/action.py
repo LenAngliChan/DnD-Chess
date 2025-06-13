@@ -35,6 +35,7 @@ class BaseAction(ABC):
         self._figure = figure
         self._perk = perk
         self._texture = texture
+        self._radius = perk.radius if perk else 1
 
     def __str__(self) -> str:
         """Полное описание действия"""
@@ -68,6 +69,10 @@ class BaseAction(ABC):
     @property
     def texture(self) -> "Texture":
         return self._texture
+
+    @property
+    def radius(self) -> int:
+        return self._radius
 
     @abstractmethod
     def realise(
