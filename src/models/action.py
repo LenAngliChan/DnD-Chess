@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from src.utils.tools import info_context
 from src.abstractions.action import BaseAction
-from src.utils.enums import ActionType, PerkType, FigureStatus, ActionKWArgs
+from src.utils.enums import ActionType, PerkType, FigureStatus
 from src.utils.messages import (
     ACTION_DEFEND_MSG,
     ACTION_NO_TARGET_MSG,
@@ -139,10 +139,6 @@ class Action(BaseAction):
         # Расчет бонусов от домена и здания
         domain_bonus = (self.figure.domain.power - target.figure.domain.power) // 2
         building_bonus = target.building.defence if target.building else 0
-        action_kwargs = {
-            ActionKWArgs.domain_bonus.value: domain_bonus,
-            ActionKWArgs.building_bonus.value: building_bonus,
-        }
 
         # активируем способность, цель - фигура (персонаж фигуры)
         if self.perk.attribute == PerkType.shield.value:
@@ -151,7 +147,11 @@ class Action(BaseAction):
         else:
             # иначе - другой юнит
             unit = target.figure.unit
-        self.perk.activate(target=unit, **action_kwargs)
+        self.perk.activate(
+            target=unit,
+            domain_bonus=domain_bonus,
+            building_bonus=building_bonus,
+        )
 
         # проверяем статус фигуры
         target.figure.check_status()
@@ -194,35 +194,35 @@ class Action(BaseAction):
         target.capture(figure=self.figure)
         self.figure.can_move = False
 
-    def __create_convergence(
-        self,
-        target: "BaseCell",
-    ) -> None:
-        """Сближение фигуры для ближнего боя
-
-        Args:
-            target: цель действия (клетка)
-        """
-
-        # если цель слева
-        if self.figure.center_x > target.center_x:
-            new_coord_x = target.right
-        # если цель справа
-        elif self.figure.center_x < target.center_x:
-            new_coord_x = target.left
-        # если цель на той же оси X
-        else:
-            new_coord_x = self.figure.center_x
-
-        # если цель сверху
-        if self.figure.center_y > target.center_x:
-            new_coord_y = target.bottom
-        # если цель снизу
-        elif self.figure.center_y < target.center_x:
-            new_coord_y = target.top
-        # если цель на той же оси Y
-        else:
-            new_coord_y = self.figure.center_y
+    # def __create_convergence(
+    #     self,
+    #     target: "BaseCell",
+    # ) -> None:
+    #     """Сближение фигуры для ближнего боя
+    #
+    #     Args:
+    #         target: цель действия (клетка)
+    #     """
+    #
+    #     # если цель слева
+    #     if self.figure.center_x > target.center_x:
+    #         new_coord_x = target.right
+    #     # если цель справа
+    #     elif self.figure.center_x < target.center_x:
+    #         new_coord_x = target.left
+    #     # если цель на той же оси X
+    #     else:
+    #         new_coord_x = self.figure.center_x
+    #
+    #     # если цель сверху
+    #     if self.figure.center_y > target.center_x:
+    #         new_coord_y = target.bottom
+    #     # если цель снизу
+    #     elif self.figure.center_y < target.center_x:
+    #         new_coord_y = target.top
+    #     # если цель на той же оси Y
+    #     else:
+    #         new_coord_y = self.figure.center_y
 
 
 class MoveAction(Action):

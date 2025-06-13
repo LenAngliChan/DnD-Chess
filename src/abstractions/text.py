@@ -41,7 +41,7 @@ class BaseScrollableTextArea(UITextArea, UIAnchorLayout, ABC):
             font_name=font_name,
             font_size=font_size,
             size_hint=(0.5, 0.8),
-            kwargs=kwargs)
+            **kwargs)
 
         indicator_size = 22
         self._down_indicator = UIImage(

@@ -1,3 +1,4 @@
+from typing import List
 from utils.tools import BaseAttribute
 
 
@@ -15,6 +16,15 @@ class WeaponType(BaseAttribute):
     medium = "Фехтовальный"
     light = "Легкий"
     ranged = "Дальний"
+
+    @classmethod
+    def values(cls) -> List[str]:
+        return [
+            cls.heavy.value,
+            cls.medium.value,
+            cls.light.value,
+            cls.ranged.value,
+        ]
 
 
 class ArmorType(BaseAttribute):
@@ -38,7 +48,7 @@ class PerkStatus(BaseAttribute):
     blocked = "Заблокирован"
 
 
-class PerkModifier(BaseAttribute):
+class RollModifier(BaseAttribute):
     standard = "Обычный"
     advantage = "Преимущество"
     vulnerability = "Уязвимость"
@@ -65,3 +75,5 @@ class FigureStatus(BaseAttribute):
 class ActionKWArgs(BaseAttribute):
     domain_bonus = "Сила Домена"
     building_bonus = "Защита Башни"
+    mastery = "Мастерство"
+    resist = "Сопротивление"

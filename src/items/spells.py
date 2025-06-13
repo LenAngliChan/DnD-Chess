@@ -1,13 +1,20 @@
 from models.item import Spell
 from src.utils.enums import MagicType
+from src.models.effect import Elemental, Heal
 
 
 class DivineSmite(Spell):
 
     def __init__(self):
+        effect = Elemental(
+            name="DivineSmite",
+            title="Божественная Кара",
+            item=self,
+        )
         super().__init__(
             name="DivineSmite",
             title="Божественная Кара",
+            effect=effect,
             damage=6,
             magic_type=MagicType.radiant.value,
         )
@@ -16,9 +23,15 @@ class DivineSmite(Spell):
 class FireBall(Spell):
 
     def __init__(self):
+        effect = Elemental(
+            name="FireBall",
+            title="Огненный Шар",
+            item=self,
+        )
         super().__init__(
             name="FireBall",
             title="Огненный Шар",
+            effect=effect,
             damage=8,
             magic_type=MagicType.fire.value,
         )
@@ -27,9 +40,15 @@ class FireBall(Spell):
 class FaerieTale(Spell):
 
     def __init__(self):
+        effect = Elemental(
+            name="FaerieTale",
+            title="Сказка Феи",
+            item=self,
+        )
         super().__init__(
             name="FaerieTale",
             title="Сказка Феи",
+            effect=effect,
             damage=8,
             magic_type=MagicType.psychic.value,
         )
@@ -38,9 +57,15 @@ class FaerieTale(Spell):
 class IceStorm(Spell):
 
     def __init__(self):
+        effect = Elemental(
+            name="IceStorm",
+            title="Ледяной Шторм",
+            item=self,
+        )
         super().__init__(
             name="IceStorm",
             title="Ледяной Шторм",
+            effect=effect,
             damage=8,
             magic_type=MagicType.ice.value,
         )
@@ -49,9 +74,15 @@ class IceStorm(Spell):
 class ShadowBlade(Spell):
 
     def __init__(self):
+        effect = Elemental(
+            name="ShadowBlade",
+            title="Теневой Клинок",
+            item=self,
+        )
         super().__init__(
             name="ShadowBlade",
             title="Теневой Клинок",
+            effect=effect,
             damage=6,
             magic_type=MagicType.dark.value,
         )
@@ -60,9 +91,15 @@ class ShadowBlade(Spell):
 class MagicMissile(Spell):
 
     def __init__(self):
+        effect = Elemental(
+            name="MagicMissile",
+            title="Магический Снаряд",
+            item=self,
+        )
         super().__init__(
             name="MagicMissile",
             title="Магический Снаряд",
+            effect=effect,
             damage=8,
             magic_type=MagicType.force.value,
         )
@@ -71,9 +108,15 @@ class MagicMissile(Spell):
 class HealingHand(Spell):
 
     def __init__(self):
+        effect = Heal(
+            name="HealingHand",
+            title="Исцеление",
+            item=self,
+        )
         super().__init__(
             name="HealingHand",
             title="Исцеление",
+            effect=effect,
             damage=8,
             magic_type=MagicType.radiant.value,
         )

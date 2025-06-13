@@ -95,7 +95,7 @@ class ActionButton(Button):
         if self._board.started and self._action and self.visible:
             self._board.select_action(action=self._action)
             info_context.set(value=ACTION_CHOOSE_MSG.format(action=self._action.desc))
-            # пропуск хода активируем сразу - и на самого себя
+            # пропуск хода активируем сразу
             if self._action.attribute == ActionType.defend.value:
-                self._board.select_target(index=self._board.current_cell.index)
+                self._action.realise(current_cell=self._board.current_cell)
             return True

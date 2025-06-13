@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from src.abstractions.unit import BaseAbility, BaseUnit
 from src.utils.enums import WeaponType, MagicType, PerkStatus
-from src.models.dice import DiceRoll, DifficultyDice
+from src.models.dice import Dice, DiceRoll
 from src.utils.constants import SAVE_THROW_DICE_SIDE
 
 if TYPE_CHECKING:
@@ -26,7 +26,7 @@ class Ability(BaseAbility):
         super().__init__(
             characteristic=characteristic,
         )
-        dice = DifficultyDice(side=SAVE_THROW_DICE_SIDE)
+        dice = Dice(side=SAVE_THROW_DICE_SIDE)
         self.save_roll = DiceRoll(dice=dice)
 
     def save_throw(self, attribute: "BaseAttribute") -> int:
@@ -43,7 +43,7 @@ class Ability(BaseAbility):
         """
 
         # базовый спасбросок
-        if isinstance(attribute, WeaponType):
+        if attribute in WeaponType.values():
             # против оружия нет бонусов
             value = 0
         elif attribute == MagicType.dark.value:
@@ -54,7 +54,7 @@ class Ability(BaseAbility):
             value = self.save_roll.action()
 
         # спасбросок по умению
-        if isinstance(attribute, WeaponType):
+        if attribute in WeaponType.values():
             # против оружия спасбросок по ловкости
             ability = self._dexterity
         elif attribute == MagicType.force.value:

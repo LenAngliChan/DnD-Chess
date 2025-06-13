@@ -179,6 +179,7 @@ class InfoContext:
     """Контекстный менеджер сообщений"""
     def __init__(self):
         self._text = ContextVar("text")
+        self._text.set("")
         self._default_value = DEFAULT_MSG
 
     def set(self, value: str) -> None:

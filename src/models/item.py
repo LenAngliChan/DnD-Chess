@@ -2,11 +2,13 @@ from typing import TYPE_CHECKING
 
 from src.abstractions.item import BaseItem
 from src.models.dice import DiceRoll, Dice, StaticDice
-from src.utils.enums import MagicType, WeaponType, ArmorType
+from src.utils.enums import MagicType, WeaponType, ArmorType, RollModifier
 
 if TYPE_CHECKING:
+    from src.abstractions.effect import BaseEffect
     from utils.tools import BaseAttribute
     from src.abstractions.dice import BaseDice
+    from src.utils.tools import F_spec
 
 
 class Item(BaseItem):
@@ -17,7 +19,9 @@ class Item(BaseItem):
         name: str,
         title: str,
         value_dice: "BaseDice",
+        effect: "BaseEffect",
         attribute: "BaseAttribute",
+        modifier: "BaseAttribute" = RollModifier.standard.value,
         times: int = 1,
     ):
         """Инициализация предмета
@@ -26,25 +30,32 @@ class Item(BaseItem):
             name: имя предмета
             title: имя предмета для отображения на gui
             value_dice: кость (значение предмета)
+            effect: эффект предмета
             attribute: тип предмета
+            modifier: модификатор предмета
             times: количество бросков кости
         """
-        value = DiceRoll(dice=value_dice, times=times)
+        value = DiceRoll(
+            dice=value_dice,
+            modifier=modifier,
+            times=times,
+        )
         super().__init__(
             name=name,
             title=title,
             value=value,
+            effect=effect,
             attribute=attribute,
         )
 
-    def deal(self) -> int:
+    def deal(self, **kwargs: "F_spec.kwargs") -> int:
         """Выполнить действие предмета
         Делается бросок кости предмета
 
         Returns:
             int: значение
         """
-        return self._value.action()
+        return self._value.action(**kwargs)
 
 
 class Weapon(Item):
@@ -54,6 +65,7 @@ class Weapon(Item):
         self,
         name: str,
         title: str,
+        effect: "BaseEffect",
         damage: int = 4,
         weapon_type: "BaseAttribute" = WeaponType.medium.value,
         times: int = 1,
@@ -63,6 +75,7 @@ class Weapon(Item):
         Args:
             name: имя оружия
             title: имя предмета для отображения на gui
+            effect: эффект предмета
             damage: урон оружия
             weapon_type: тип оружия
             times: количество бросков кости
@@ -72,6 +85,7 @@ class Weapon(Item):
             name=name,
             title=title,
             value_dice=value_dice,
+            effect=effect,
             attribute=weapon_type,
             times=times,
         )
@@ -84,6 +98,7 @@ class Spell(Item):
         self,
         name: str,
         title: str,
+        effect: "BaseEffect",
         damage: int = 4,
         magic_type: "BaseAttribute" = MagicType.fire.value,
         times: int = 1,
@@ -93,6 +108,7 @@ class Spell(Item):
         Args:
             name: имя заклинания
             title: имя предмета для отображения на gui
+            effect: эффект предмета
             damage: урон заклинания
             magic_type: тип заклинания
             times: количество бросков кости
@@ -102,6 +118,7 @@ class Spell(Item):
             name=name,
             title=title,
             value_dice=value_dice,
+            effect=effect,
             attribute=magic_type,
             times=times,
         )
@@ -114,6 +131,7 @@ class Armor(Item):
         self,
         name: str,
         title: str,
+        effect: "BaseEffect",
         defence: int = 4,
         armor_type: "BaseAttribute" = ArmorType.medium_shield.value,
     ):
@@ -122,6 +140,7 @@ class Armor(Item):
         Args:
             name: имя брони
             title: имя предмета для отображения на gui
+            effect: эффект предмета
             defence: защита брони
             armor_type: тип брони
         """
@@ -130,5 +149,6 @@ class Armor(Item):
             name=name,
             title=title,
             value_dice=value_dice,
+            effect=effect,
             attribute=armor_type,
         )

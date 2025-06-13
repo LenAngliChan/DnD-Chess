@@ -16,22 +16,20 @@ NEXT_DOMAIN_MSG = "Начинается ход фракции {domain}!"
 PERK_STATUS_DONE_MSG = "Способность {name} перезаряжается!"
 PERK_STATUS_BLOCKED_MSG = "Способность {name} заблокирована!"
 PERK_ACTIVATE_MSG = "Способность {name} использована на цели {target} с модификатором {modifier}"
-PERK_HIT_CHANCE_MSG = (
-    "Бросок на попадание фигуры {success}, бросок на уклонение противника {failure}, "
-    "результат атаки: {hit}"
-)
-PERK_CRIT_CHANCE_MSG = (
-    "Бросок на крит. удар фигуры {success}, сопротивление противника {failure}, "
-    "результат атаки: {crit}"
-)
-PERK_HIT_VALUE_MSG = "Урон способности {value}, бонус мастерства {mastery}"
-PERK_CRIT_VALUE_MSG = "Критический урон {value}"
-PERK_BONUS_MSG = ("Применены дополнительные бонусы: "
-                  "от домена {domain}, от здания {building}, от сопротивления противника {resist}")
-PERK_RESULT_MSG = "Реузльтат использования способности: {result} {type} по цели {name}"
-PERK_ATTACK_MSG = "Реузльтат использования способности: {result} {type} урона по цели {name}"
-PERK_HEAL_MSG = "Реузльтат использования способности: исцеление {name} на {result} единиц"
-PERK_SHIELD_MSG = "Реузльтат использования способности: {result} дополнительной защиты для {name}"
+PERK_HIT_CHANCE_MSG = "Бросок на попадание фигуры"
+PERK_CRIT_CHANCE_MSG = "Бросок на критический удар фигуры"
+EFFECT_HIT_VALUE_MSG = "Урон способности {value}, бонус мастерства {mastery}"
+EFFECT_CRIT_VALUE_MSG = "Критический урон {value}"
+MELEE_ATTACK_MSG = "Результат физической атаки: {result} {type} урона по цели {name}"
+SHIELD_APPLY_MSG = "Результат защитной стойки: {result} дополнительной защиты для {name}"
+MAGIC_ATTACK_MSG = "Результат магической атаки: {result} {type} урона по цели {name}"
+HEAL_APPLY_MSG = "Результат лечения: исцеление {name} на {result} единиц"
+
+# сообщение о бросках кости
+DICE_ROLL_MSG = "Бросок кости равен {value}, штраф {penalty}"
+CHECK_ROLL_MSG = "Бросок на попадание: успех {success}, провал {failure}, результат {result}"
+CRIT_SUCCESS_MSG = "Бросок на попадание {value}: Критических Успех!"
+CRIT_FAILURE_MSG = "Бросок на попадание {value}: Критических Провал!"
 
 # Сообщения использования действия
 ACTION_CHOOSE_MSG = "Выбрано действие {action}"

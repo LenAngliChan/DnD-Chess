@@ -32,7 +32,7 @@ from src.utils.characters import (
 )
 
 if TYPE_CHECKING:
-    from src.models.domain import Domain
+    from src.abstractions.domain import BaseDomain
 
 
 class Barbarian(Figure):
@@ -40,7 +40,7 @@ class Barbarian(Figure):
     def __init__(
         self,
         index: Index,
-        domain: "Domain",
+        domain: "BaseDomain",
     ):
         unit = UnitBarbarian(
             name=barbarian.name,
@@ -62,7 +62,7 @@ class Bard(Figure):
     def __init__(
         self,
         index: Index,
-        domain: "Domain",
+        domain: "BaseDomain",
     ):
         unit = UnitBard(
             name=bard.name,
@@ -84,7 +84,7 @@ class Cleric(Figure):
     def __init__(
         self,
         index: Index,
-        domain: "Domain",
+        domain: "BaseDomain",
     ):
         unit = UnitCleric(
             name=cleric.name,
@@ -106,7 +106,7 @@ class Druid(Figure):
     def __init__(
         self,
         index: Index,
-        domain: "Domain",
+        domain: "BaseDomain",
     ):
         unit = UnitDruid(
             name=druid.name,
@@ -128,7 +128,7 @@ class Fighter(Figure):
     def __init__(
         self,
         index: Index,
-        domain: "Domain",
+        domain: "BaseDomain",
     ):
         unit = UnitFighter(
             name=fighter.name,
@@ -150,7 +150,7 @@ class Monk(Figure):
     def __init__(
         self,
         index: Index,
-        domain: "Domain",
+        domain: "BaseDomain",
     ):
         unit = UnitMonk(
             name=monk.name,
@@ -172,7 +172,7 @@ class Paladin(Figure):
     def __init__(
         self,
         index: Index,
-        domain: "Domain",
+        domain: "BaseDomain",
     ):
         unit = UnitPaladin(
             name=paladin.name,
@@ -194,7 +194,7 @@ class Ranger(Figure):
     def __init__(
         self,
         index: Index,
-        domain: "Domain",
+        domain: "BaseDomain",
     ):
         unit = UnitRanger(
             name=ranger.name,
@@ -216,7 +216,7 @@ class Rogue(Figure):
     def __init__(
         self,
         index: Index,
-        domain: "Domain",
+        domain: "BaseDomain",
     ):
         unit = UnitRogue(
             name=rogue.name,
@@ -238,7 +238,7 @@ class Sorcerer(Figure):
     def __init__(
         self,
         index: Index,
-        domain: "Domain",
+        domain: "BaseDomain",
     ):
         unit = UnitSorcerer(
             name=sorcerer.name,
@@ -260,7 +260,7 @@ class Warlock(Figure):
     def __init__(
         self,
         index: Index,
-        domain: "Domain",
+        domain: "BaseDomain",
     ):
         unit = UnitWarlock(
             name=warlock.name,
@@ -282,7 +282,7 @@ class Wizard(Figure):
     def __init__(
         self,
         index: Index,
-        domain: "Domain",
+        domain: "BaseDomain",
     ):
         unit = UnitWizard(
             name=wizard.name,

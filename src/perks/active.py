@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from src.models.perk import Elemental, Armor, PerkCombination
+from src.models.perk import Magic, Armor, PerkCombination
 from src.perks.melee import AttackWithSwordBastard
 from src.perks.elemental import UseDivineSmite
 from src.utils.enums import PerkType, ArmorType
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from src.abstractions.item import BaseItem
 
 
-class UseHealingHand(Elemental):
+class UseHealingHand(Magic):
     """Способность - использовать исцеление"""
 
     def __init__(self, person: "BaseUnit"):
@@ -68,5 +68,5 @@ class AttackWithSwordBySpell(PerkCombination):
                 person=person,
                 texture=DS_SWORD_TEXTURE,
             ),
-            effects=[UseDivineSmite(person=person)],
+            other_perks=[UseDivineSmite(person=person)],
         )

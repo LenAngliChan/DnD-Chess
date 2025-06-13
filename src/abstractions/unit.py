@@ -34,7 +34,7 @@ class BaseAbility(ABC):
         self._base_hp_coefficient = characteristic.base_hp_coefficient
         self._base_hit_chance = characteristic.base_hit_chance
         self._base_defence = characteristic.base_defence
-        self._base_crit_chance = characteristic.base_hit_chance
+        self._base_crit_chance = characteristic.base_crit_chance
         self._base_crit_resistance = characteristic.base_crit_resistance
         self._base_magic_resistance = characteristic.base_magic_resistance
 

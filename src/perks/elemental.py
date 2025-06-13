@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from src.models.perk import Elemental
+from src.models.perk import Magic
 from src.utils.textures import (
     D_S_SPELL_TEXTURE,
     F_B_SPELL_TEXTURE,
@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     from src.abstractions.unit import BaseUnit
 
 
-class UseDivineSmite(Elemental):
+class UseDivineSmite(Magic):
     """Способность - использовать заклинание Божественная Кара"""
 
     def __init__(self, person: "BaseUnit"):
@@ -35,7 +35,7 @@ class UseDivineSmite(Elemental):
         )
 
 
-class UseFireBall(Elemental):
+class UseFireBall(Magic):
     """Способность - использовать заклинание Огненный Шар"""
 
     def __init__(self, person: "BaseUnit"):
@@ -48,7 +48,7 @@ class UseFireBall(Elemental):
         )
 
 
-class UseFaerieTale(Elemental):
+class UseFaerieTale(Magic):
     """Способность - использовать заклинание Сказка Феи"""
 
     def __init__(self, person: "BaseUnit"):
@@ -61,7 +61,7 @@ class UseFaerieTale(Elemental):
         )
 
 
-class UseIceStorm(Elemental):
+class UseIceStorm(Magic):
     """Способность - использовать заклинание Ледяной Шторм"""
 
     def __init__(self, person: "BaseUnit"):
@@ -74,7 +74,7 @@ class UseIceStorm(Elemental):
         )
 
 
-class UseShadowBlade(Elemental):
+class UseShadowBlade(Magic):
     """Способность - использовать заклинание Теневой Клинок"""
 
     def __init__(self, person: "BaseUnit"):
@@ -87,7 +87,7 @@ class UseShadowBlade(Elemental):
         )
 
 
-class UseMagicMissile(Elemental):
+class UseMagicMissile(Magic):
     """Способность - использовать заклинание Магический Снаряд"""
 
     def __init__(self, person: "BaseUnit"):
